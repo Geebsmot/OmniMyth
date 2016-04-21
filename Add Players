@@ -1,0 +1,168 @@
+state.nmbrJoined = [
+    {"number":0}
+    ]
+
+state.playerCharInfo = [
+    {"plyrObj":0,"plyrId":0,"charId":0,"charObj":0,"tokenId":0,"number":1,"charTopPos":0,"charLeftPos":0},
+    {"plyrObj":0,"plyrId":0,"charId":0,"charObj":0,"tokenId":0,"number":2,"charTopPos":0,"charLeftPos":0},
+    {"plyrObj":0,"plyrId":0,"charId":0,"charObj":0,"tokenId":0,"number":3,"charTopPos":0,"charLeftPos":0},
+    {"plyrObj":0,"plyrId":0,"charId":0,"charObj":0,"tokenId":0,"number":4,"charTopPos":0,"charLeftPos":0},
+    {"plyrObj":0,"plyrId":0,"charId":0,"charObj":0,"tokenId":0,"number":5,"charTopPos":0,"charLeftPos":0}
+    ]
+
+state.playerIndex = [];
+
+var charAttributes = [
+        {"name":"PRO","valueMax":1,"valueCurrent":1,"_id":0},
+        {"name":"INT","valueMax":1,"valueCurrent":1,"_id":0},
+        {"name":"CON","valueMax":1,"valueCurrent":1,"_id":0},
+        {"name":"MOM","valueMax":1,"valueCurrent":1,"_id":0},
+        {"name":"MAS","valueMax":1,"valueCurrent":1,"_id":0},
+        {"name":"STA","valueMax":1,"valueCurrent":1,"_id":0},
+        {"name":"PER","valueMax":1,"valueCurrent":1,"_id":0},
+        {"name":"COT","valueMax":1,"valueCurrent":1,"_id":0},
+        {"name":"CRE","valueMax":1,"valueCurrent":1,"_id":0},
+        {"name":"enHP","valueMax":1,"valueCurrent":0,"_id":0},
+        {"name":"sHP","valueMax":1,"valueCurrent":0,"_id":0},
+        {"name":"esHP","valueMax":1,"valueCurrent":0,"_id":0},
+        ];
+        
+state.charAttributes = [charAttributes,charAttributes,charAttributes,charAttributes,charAttributes];        
+    
+state.plyrNmbr = [];
+
+state.charPlyr = [];
+
+var charModels = [
+    {"name":"lostSoul","type":"https://s3.amazonaws.com/files.d20.io/images/14706302/VkD881Zi0azMUDlAgq14BQ/thumb.png?1450972395"}
+    ];
+
+var charAura = [
+    {"element":0,"leftPos":0,"topPos":0,"power":0,"auraObj":0},
+    {"element":0,"leftPos":0,"topPos":0,"power":0,"auraObj":0},
+    {"element":0,"leftPos":0,"topPos":0,"power":0,"auraObj":0},
+    {"element":0,"leftPos":0,"topPos":0,"power":0,"auraObj":0},
+    {"element":0,"leftPos":0,"topPos":0,"power":0,"auraObj":0},
+    {"element":0,"leftPos":0,"topPos":0,"power":0,"auraObj":0},
+    {"element":0,"leftPos":0,"topPos":0,"power":0,"auraObj":0},
+    {"element":0,"leftPos":0,"topPos":0,"power":0,"auraObj":0},
+    {"element":0,"leftPos":0,"topPos":0,"power":0,"auraObj":0}
+    ];
+
+var plyrCharAura = [charAura,charAura,charAura,charAura,charAura,charAura];
+
+
+on ("add:player", function (obj) {
+    "use strict";
+    
+//    var joined = state.nmbrJoined[0].number;
+//    if (state.playerNumber[joined]._id === 0){
+       var nmbrJoined = state.playerIndex.push(obj.get("_id"));
+        state.playerCharInfo[+nmbrJoined - 1].plyrObj = obj;
+        state.playerCharInfo[+nmbrJoined - 1].plyrId = obj.get("_id");
+
+        log("state.playerIndex at add player"+ state.playerIndex[nmbrJoined - 1]);
+        
+        if ((state.playerCharInfo[+nmbrJoined - 1].plyrObj).get("_online")!==false){ 
+            addCharacter(+nmbrJoined - 1);
+        }
+        
+        //state.nmbrJoined[0].number = (+state.nmbrJoined[0].number + 1);
+        //state.plyrNmbr[joined] = obj.get("_id");
+        
+        //TEST CHECK
+        //log ("joined=" +joined)
+        //log ("playersJoined"+state.nmbrJoined[0].number);
+        //log ("playerNumber"+state.playerNumber[joined].number)
+    
+});
+
+var addCharacter = function (plyrNmbr){
+    "use strict";
+     
+    //CHECKER
+    //log("addchar Fires with this plyrNmbr"+ plyrNmbr)
+    
+    var chars=findObjs({_type:'character'});
+        _.each(chars, function(obj){
+        state.charPlyr.push(obj.get("controlledby"))
+        });
+        
+    //CHECKER
+    log ("plyrNmbr at addCharacter"+plyrNmbr)
+    log ("state.charPlyr on addCharacter"+state.charPlyr[plyrNmbr])
+    log ("state.playerIndex[plyrNmbr] at addCharacter"+state.playerIndex[plyrNmbr])
+    
+    if (state.charPlyr.indexOf(state.playerIndex[plyrNmbr])===-1){
+        
+        var addedChar = createObj("character",{
+            name:"Soul"+String(plyrNmbr),
+            avatar: charModels[0].type,
+            controlledby: state.playerIndex[plyrNmbr],
+            inplayerjournals: "all",
+            bio: "A drifting soul...",
+        });
+            
+        state.playerCharInfo[plyrNmbr].charId = addedChar.id;
+        state.playerCharInfo[plyrNmbr].charObj = addedChar;
+        
+        log ("this is variable addedChar"+addedChar)
+        log ("this should be char ID"+state.playerNumber[plyrNmbr].charId)
+        
+        var charAdded = createObj("graphic",{
+            name:"Soul"+String(plyrNmbr),
+            imgsrc: charModels[0].type,
+            controlledby: state.playerIndex[plyrNmbr],
+            left:385+(70*plyrNmbr),
+            top:315,
+            width:70,
+            height:70,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"objects",
+             
+        });  
+        
+        state.playerCharInfo[plyrNmbr].charTopPos = charAdded.get("top");
+        state.playerCharInfo[plyrNmbr].charLeftPos = charAdded.get("left");
+        state.playerCharInfo[plyrNmbr].tokenId = charAdded.id;
+        
+        log ("char added tokenID"+state.playerCharInfo[plyrNmbr].tokenId);
+       
+       for(var i=0;i<9;i++) {
+            state.charAttributes[plyrNmbr][i]._id = createObj("attribute",{
+                name:state.charAttributes[plyrNmbr][i].name,
+                _characterid: state.playerCharInfo[plyrNmbr].charId,
+                current: state.charAttributes[plyrNmbr][i].valueCurrent,
+            });
+        };
+        
+        for(var y=9;y<12;y++){
+            state.charAttributes[plyrNmbr][y]._id = createObj("attribute",{
+                name:state.charAttributes[plyrNmbr][y].name,
+                _characterid: state.playerCharInfo[plyrNmbr].charId,
+                current: ((state.charAttributes[plyrNmbr][0+(3*(y%3))].valueCurrent)+(state.charAttributes[plyrNmbr][1+(3*(y%3))].valueCurrent)+(state.charAttributes[plyrNmbr][2+(3*(y%3))].valueCurrent)),
+                max: ((state.charAttributes[plyrNmbr][0+(3*(y%3))].valueMax)+(state.charAttributes[plyrNmbr][1+(3*(y%3))].valueMax)+(state.charAttributes[plyrNmbr][2+(3*(y%3))].valueMax)),
+            });
+            
+            var barNmbr = ("bar"+String((y%3)+ 1)+"_value"); 
+            charAdded.set(barNmbr,(state.charAttributes[plyrNmbr][y]._id.get("current")));
+        };
+    
+    };    
+};
+
+on("change:attribute", function(obj) {
+    for(i=0; i>5;i++){
+        if ((obj.get("_characterid")).indexOf(state.playerNumber[i].charID)!==-1){
+           for(x=0; x>12;x++){
+                var attributeName = state.charAttributes[i][x].name;
+                if(attributeName == obj.get("name")){
+                    state.charAttributes[i][x].valueCurrent = obj.get("current");
+                    if (state.charAttributes[i][x].valueMax !== 0){
+                        state.charAttributes[i][x].valueMax = obj.get("max");
+                    };
+                };
+            };
+        };
+    };
+});
