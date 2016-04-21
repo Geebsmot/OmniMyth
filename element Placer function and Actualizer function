@@ -1,0 +1,298 @@
+var tempObj = {"obj":0,"_id":0,"leftPos":0,"topPos":0,"relativeTopPos":0,"relativeLeftPos":0,"element":0,"type":0,"PRO":0,"INT":0,"CON":0,"MOM":0,"tempMOM":0,"MAS":0,"STA":0,"PER":0,"COT":0,"CRE":0,"diffLvl":0,"shape":0,"size":0,"accuracy":0,"control":0,"direction":0,"arrowObj":0,"complexity":0,"layering":0,"hasEffects":0};
+                
+var tempObjTemplate = {"obj":0,"_id":0,"leftPos":0,"topPos":0,"relativeTopPos":0,"relativeLeftPos":0,"element":0,"type":0,"PRO":0,"INT":0,"CON":0,"MOM":0,"tempMOM":0,"MAS":0,"STA":0,"PER":0,"COT":0,"CRE":0,"diffLvl":0,"shape":0,"size":0,"accuracy":0,"control":0,"direction":0,"arrowObj":0,"complexity":0,"layering":0,"hasEffects":0}
+var tempPlaced = [];
+var playerTempPlaced = []
+var playerTempObj = [playerTempPlaced,playerTempPlaced,playerTempPlaced,playerTempPlaced,playerTempPlaced];   
+var realizedObj = [];
+var allRealizedObj = [];
+var realizedNmbr = 0
+
+
+
+on ("chat:message", function(msg) {
+    if (msg.type == "api" && msg.content.indexOf("!placeTemp") !== -1) {
+        var makerType = msg.content.charAt(10);
+        if ((makerType !== "")&&((+makerType===0)||(+makerType===1)||(+makerType===2))){
+            var plyrNmbr = state.playerIndex.indexOf(msg.playerid)  
+                    //log("placeTemp"+plyrNmbr+makerType);
+                    tempPlacerObj(plyrNmbr,makerType);
+                    
+                
+            
+        }    
+    }   
+}); 
+
+var tempPlacerObj = function (plyrNmbr,makerType){
+    
+        //log("temp Obj player and maker"+plyrNmbr+makerType)
+        //log("plyrMaker left on tempPlace"+playerMaker[plyrNmbr][+makerType + 3].leftPosTemp)
+        //log("plyrMaker top on tempPlace"+playerMaker[plyrNmbr][+makerType + 3].topPosTemp)
+         var tempNew = Object.create(tempObj);
+         playerTempObj[plyrNmbr].push(tempNew);
+         var nmbrPlaced = playerTempObj[plyrNmbr].length   
+         nmbrPlaced -= 1;
+         var nameType = "energy"
+        
+        
+        log("playerTempObj[plyrNmbr][nmbrPlaced].diffLvl at start of placeTemp"+playerTempObj[plyrNmbr][nmbrPlaced].diffLvl)
+    //  var tempPlacedNmbr = plyrTempPlaced[plyrNmbr]
+    //    log("plyrNmbr at tempPlacerObj"+ plyrNmbr);
+    //    log("tempPlacedNmbr and plyrTempPlaced at beginning of placeTemp"+tempPlacedNmbr+" "+plyrTempPlaced[plyrNmbr])
+                                                                            //(Math.floor((+plyrMakerStatLvl[plyrNmbr][4].statLvl)/2))
+        
+        if (+makerType === 1){      
+            log("plyrMakerStatLvl[plyrNmbr][4].statLvl at placeTemp"+plyrMakerStatLvl[plyrNmbr][4].statLvl);
+            log("state.makerElem[plyrNmbr][makerType].element at placeTemp"+ state.makerElem[plyrNmbr][makerType].element);
+            
+            nameType = "stable"
+            var slot1 = Math.floor(plyrMakerStatLvl[plyrNmbr][4].statLvl / 2);
+            var slot2 = state.makerElem[plyrNmbr][makerType].element;
+            var tableElemIcon = tableElementTypes[makerType][slot1][slot2].imgsrc;
+            var tableElemName = tableElementTypes[makerType][slot1][slot2].name;
+            playerTempObj[plyrNmbr][nmbrPlaced].size = slot1
+            
+            log("tableElemName at placeTemp"+tableElemName);
+            log("tableElemIcon at placeTemp"+tableElemIcon);
+        
+        }
+        else {
+            var tableElemIcon = tableElementTypes[makerType][state.makerElem[plyrNmbr][makerType].element].imgsrc
+            var tableElemName = tableElementTypes[makerType][state.makerElem[plyrNmbr][makerType].element].name
+            log("tableElemName at placeTempNOTMAKERTYPE1"+tableElemName);
+            log("tableElemIcon at placeTempNOTMAKERTYPE1"+tableElemIcon);
+        };
+        
+        var tokenRotation = 0;
+        if (+makerType ===2){
+            nameType = "essence"
+            var topDiff = (+state.playerCharInfo[plyrNmbr].charTopPos - +playerMaker[plyrNmbr][+makerType + 3].topPosTemp);
+            var leftDiff = (+state.playerCharInfo[plyrNmbr].charLeftPos - +playerMaker[plyrNmbr][+makerType + 3].leftPosTemp);
+            
+            log("state.playerCharInfo[plyrNmbr].charTopPos at plce Temp"+state.playerCharInfo[plyrNmbr].charTopPos);
+            log("playerMaker[plyrNmbr][makerType].topPosTemp at place Temp"+playerMaker[plyrNmbr][+makerType+ 3].topPosTemp);
+            
+            if ((topDiff>=0)&&(leftDiff>=0)){                          //FIRST QUADRANT
+                if ((Math.abs(topDiff) - Math.abs(leftDiff))>0){
+                    tokenRotation = 270;
+                }
+                else if (Math.abs(topDiff)===Math.abs(leftDiff)){
+                    tokenRotation = 225
+                }
+                else {
+                    tokenRotation = 180
+                }
+            
+            }
+            else if ((topDiff>=0)&&(leftDiff<=0)){
+                
+                if ((Math.abs(topDiff) - Math.abs(leftDiff))>0){
+                    tokenRotation = 270;
+                }
+                else if (Math.abs(topDiff)===Math.abs(leftDiff)){
+                    tokenRotation = 315
+                }
+                else {
+                    tokenRotation = 0
+                }
+            }
+            else if ((topDiff<=0)&&(leftDiff<=0)){
+                if ((Math.abs(topDiff)-Math.abs(leftDiff))>0){
+                    tokenRotation = 90
+                }
+                else if (Math.abs(topDiff)===Math.abs(leftDiff)){
+                    tokenRotation = 45
+                }
+                else {
+                    tokenRotation = 0
+                }
+            }    
+            else if ((topDiff<=0)&&(leftDiff>=0)){
+                if ((Math.abs(topDiff)-Math.abs(leftDiff))>0){
+                    tokenRotation = 90
+                }
+                else if (Math.abs(topDiff)===Math.abs(leftDiff)){
+                    tokenRotation = 135
+                }    
+                else {
+                    tokenRotation = 180
+                }
+            };
+            log("tokenRotation at plceTemp"+tokenRotation)
+        }   
+        else {
+            tokenRotation = 0;
+            log("tokenRotation at plceTemp"+tokenRotation)
+        };
+        
+        var tempObjNew = createObj("graphic",{
+        name: nameType +" "+ tableElemName + String(playerTempObj[plyrNmbr].length),
+        imgsrc: tableElemIcon,
+        left:playerMaker[plyrNmbr][+makerType + 3].leftPosTemp,
+        top:playerMaker[plyrNmbr][+makerType + 3].topPosTemp,
+        width:70,
+        height:70,
+        pageid:Campaign().get("playerpageid"), 
+        layer:"map",
+        controlledby: state.playerIndex[plyrNmbr],
+        rotation: tokenRotation
+    });
+        playerTempObj[plyrNmbr][nmbrPlaced].type = +makerType
+        playerTempObj[plyrNmbr][nmbrPlaced].obj = tempObjNew
+        playerTempObj[plyrNmbr][nmbrPlaced]._id = tempObjNew.id
+        playerTempObj[plyrNmbr][nmbrPlaced].leftPos = playerMaker[plyrNmbr][+makerType + 3].leftPosTemp;
+        playerTempObj[plyrNmbr][nmbrPlaced].topPos = playerMaker[plyrNmbr][+makerType + 3].topPosTemp;
+        playerTempObj[plyrNmbr][nmbrPlaced].element = state.makerElem[plyrNmbr][makerType].element;
+        playerTempObj[plyrNmbr][nmbrPlaced].type = makerType;
+        playerTempObj[plyrNmbr][nmbrPlaced].relativeTopPos = (playerTempObj[plyrNmbr][nmbrPlaced].topPos - state.playerCharInfo[plyrNmbr].charTopPos)
+        playerTempObj[plyrNmbr][nmbrPlaced].relativeLeftPos = (playerTempObj[plyrNmbr][nmbrPlaced].leftPos - state.playerCharInfo[plyrNmbr].charLeftPos)
+        
+        log("realtive Top Pos at tempPlacerObj"+playerTempObj[plyrNmbr][nmbrPlaced].relativeTopPos);
+        log("realtive Left Pos at tempPlacerObj"+playerTempObj[plyrNmbr][nmbrPlaced].relativeLeftPos);
+      
+        
+        if(+makerType === 0){
+            playerTempObj[plyrNmbr][nmbrPlaced].PRO = plyrMakerStatLvl[plyrNmbr][0].statLvl; 
+            playerTempObj[plyrNmbr][nmbrPlaced].INT = plyrMakerStatLvl[plyrNmbr][1].statLvl;
+            playerTempObj[plyrNmbr][nmbrPlaced].CON = plyrMakerStatLvl[plyrNmbr][2].statLvl;
+            playerTempObj[plyrNmbr][nmbrPlaced].obj.set("name",("energyPRO"+String(playerTempObj[plyrNmbr][nmbrPlaced].PRO)+" "+"INT"+String(playerTempObj[plyrNmbr][nmbrPlaced].INT)+" "+"CON"+String(playerTempObj[plyrNmbr][nmbrPlaced].CON)));
+                for (var x=0; x<3; x++){
+                    playerTempObj[plyrNmbr][nmbrPlaced].diffLvl += (+plyrMakerStatLvl[plyrNmbr][x].statLvl - +plyrBonusLvl[plyrNmbr][x].bnsLvl);
+                };    
+            if ((playerTempObj[plyrNmbr][nmbrPlaced].element == 1)||(playerTempObj[plyrNmbr][nmbrPlaced].element ==4)){
+                
+                var arrowEN = createObj("graphic", {
+                    name: "DirectionArrowEN",
+                    imgsrc: "https://s3.amazonaws.com/files.d20.io/images/15050334/G4Oz9nc2txZffrLCAtW4Ow/thumb.png?1452203481",
+                    left:(+playerMaker[plyrNmbr][+makerType + 3].leftPosTemp) - 30,
+                    top:(+playerMaker[plyrNmbr][+makerType + 3].topPosTemp) - 30,
+                    width:20,
+                    height:20,
+                    pageid:Campaign().get("playerpageid"), 
+                    layer:"map",
+                    rotation: (+plyrMakerStatLvl[plyrNmbr][1].direction) * 45,
+                    controlledby: state.playerIndex[plyrNmbr],
+                });
+                
+                //log("arrowEN left should be"+((+playerMaker[plyrNmbr][+makerType + 3].leftPosTemp) - 30));
+                //log("arrow left"+arrowEN.left)
+                //log("arrow top"+ arrowEN.top)
+                playerTempObj[plyrNmbr][nmbrPlaced].direction = plyrMakerStatLvl[plyrNmbr][1].direction;
+                playerTempObj[plyrNmbr][nmbrPlaced].arrowObj = arrowEN;
+                //log("playerTempObj[plyrNmbr][nmbrPlaced].direction at placeTemp"+playerTempObj[plyrNmbr][nmbrPlaced].direction);
+                //log ("playerTempObj[plyrNmbr][nmbrPlaced].directionArrow.name" +playerTempObj[plyrNmbr][nmbrPlaced].directionArrow.name);
+            };
+            log("tempObj.objafter"+playerTempObj[plyrNmbr][nmbrPlaced].obj)
+            log("tempObjCONafter"+playerTempObj[plyrNmbr][nmbrPlaced].CON);
+            //log("plyrMakerStatLvl11"+" "+plyrMakerStatLvl[plyrNmbr][1].statLvl);
+            //log("plyrMakerStatLvl11.direction"+" "+plyrMakerStatLvl[plyrNmbr][1].direction);  
+        }
+        else if (+makerType === 1){
+            
+            stableSpecialPasser(playerTempObj[plyrNmbr][nmbrPlaced].element,playerTempObj[plyrNmbr][nmbrPlaced])
+            
+            playerTempObj[plyrNmbr][nmbrPlaced].MOM = plyrMakerStatLvl[plyrNmbr][3].statLvl;
+            playerTempObj[plyrNmbr][nmbrPlaced].MAS = plyrMakerStatLvl[plyrNmbr][4].statLvl;
+            playerTempObj[plyrNmbr][nmbrPlaced].STA = plyrMakerStatLvl[plyrNmbr][5].statLvl;
+            tempObjNew.set("name","stableMOM"+playerTempObj[plyrNmbr][nmbrPlaced].MOM+" "+"MAS"+playerTempObj[plyrNmbr][nmbrPlaced].MAS+" "+"STA"+playerTempObj[plyrNmbr][nmbrPlaced].STA);
+            for (var x=3; x<6; x++){
+                    playerTempObj[plyrNmbr][nmbrPlaced].diffLvl += (+plyrMakerStatLvl[plyrNmbr][x].statLvl - +plyrBonusLvl[plyrNmbr][x].bnsLvl);
+                    log(" playerTempObj[plyrNmbr][nmbrPlaced].diffLvl at placeTemp type 1"+ playerTempObj[plyrNmbr][nmbrPlaced].diffLvl)
+                };
+            playerTempObj[plyrNmbr][nmbrPlaced].size =  Math.floor(playerTempObj[plyrNmbr][nmbrPlaced].MAS / 2)
+                
+                var arrow = createObj("graphic", {
+                 name: "DirectionArrow",
+                imgsrc: stableDirectionArrow,
+                left:(+playerMaker[plyrNmbr][+makerType + 3].leftPosTemp) + 30,
+                top:(+playerMaker[plyrNmbr][+makerType + 3].topPosTemp) - 30,
+                width:20,
+                height:20,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"map",
+                rotation: (+plyrMakerStatLvl[plyrNmbr][3].direction) * 45,
+                controlledby: state.playerIndex[plyrNmbr],
+                });
+                playerTempObj[plyrNmbr][nmbrPlaced].direction = plyrMakerStatLvl[plyrNmbr][3].direction;
+                playerTempObj[plyrNmbr][nmbrPlaced].arrowObj = arrow;
+                log("playerTempObj[plyrNmbr][nmbrPlaced].direction at placeTemp"+playerTempObj[plyrNmbr][nmbrPlaced].direction)
+        }
+        else if (+makerType === 2){
+            playerTempObj[plyrNmbr][nmbrPlaced].PER = plyrMakerStatLvl[plyrNmbr][6].statLvl;
+            playerTempObj[plyrNmbr][nmbrPlaced].COT = plyrMakerStatLvl[plyrNmbr][7].statLvl;
+            playerTempObj[plyrNmbr][nmbrPlaced].CRE = plyrMakerStatLvl[plyrNmbr][8].statLvl;
+            tempObjNew.set("name","essencePER"+playerTempObj[plyrNmbr][nmbrPlaced].PER+" "+"COT"+playerTempObj[plyrNmbr][nmbrPlaced].COT+" "+"CRE"+playerTempObj[plyrNmbr][nmbrPlaced].CRE);
+            for (var x=6; x<9; x++){
+                    playerTempObj[plyrNmbr][nmbrPlaced].diffLvl += (+plyrMakerStatLvl[plyrNmbr][x].statLvl - +plyrBonusLvl[plyrNmbr][x].bnsLvl);
+                };
+        
+        };
+        
+
+        
+
+        plyrDifficulty[plyrNmbr][3].diffLvl = 0;
+        for(var x=0; x< playerTempObj[plyrNmbr].length; x++){
+            log("playerTempObj[plyrNmbr][x].diffLvl at end of plce Temp"+playerTempObj[plyrNmbr][x].diffLvl);
+        plyrDifficulty[plyrNmbr][3].diffLvl += +playerTempObj[plyrNmbr][x].diffLvl;
+        };
+    
+        
+        diffDisplay(plyrNmbr);
+        log("state.playerCharInfo[plyrNmbr].tokenId"+state.playerCharInfo[plyrNmbr].tokenId);
+        log("playerTempObj[plyrNmbr].length at end of tempplaced"+playerTempObj[plyrNmbr].length);
+        log("plyrnmbr at end of tempplaced"+plyrNmbr);
+};
+
+
+var actualizer = function(plyrNmbr){
+    
+    var rollResult = Math.floor((Math.random() * 20) + 1);
+    //
+    sendChat("Player"+String(plyrNmbr), String(rollResult));
+    
+    log("plyrnmbr at actualize"+plyrNmbr);
+    log("plyrDifficulty[plyrNmbr][3].diffLvl at actualize"+plyrDifficulty[plyrNmbr][3].diffLvl)
+    log ("rollResult at actualize"+rollResult)
+//    log ("plyrTempPlaced[plyrNmbr] at actualize"+plyrTempPlaced[plyrNmbr])
+    
+    if((rollResult >= plyrDifficulty[plyrNmbr][3].diffLvl)&&(playerTempObj[plyrNmbr].length>0)){
+        for(var i=0; i < playerTempObj[plyrNmbr].length; i++){
+        playerTempObj[plyrNmbr][i].obj.set("name",(playerTempObj[plyrNmbr][i].obj.get("name"))+"RE");
+        allRealizedObj.push(playerTempObj[plyrNmbr][i]);
+        playerTempObj[plyrNmbr][i] = tempObjTemplate;
+        };
+    }
+    else if(playerTempObj[plyrNmbr].length>0){
+        for(var i=0;i < playerTempObj[plyrNmbr].length; i++){
+            playerTempObj[plyrNmbr][i].obj.remove();
+            if (playerTempObj[plyrNmbr][i].arrowObj!==0){playerTempObj[plyrNmbr][i].arrowObj.remove()};
+            playerTempObj[plyrNmbr][i] = tempObjTemplate;
+        }
+    };    
+    plyrDifficulty[plyrNmbr][3].diffLvl = 0;
+    playerTempObj[plyrNmbr] = [];
+    log("playerTempObj[plyrNmbr].length at end of Actualize" + " " + playerTempObj[plyrNmbr].length);
+    log ("allRealizedObj.length and end of actualize"+ allRealizedObj.length);
+    
+    //if (rollResult>=plyrDifficulty[plyrNmbr][makerType].diffLvl){}
+    for(var i = 0; i<allRealizedObj.length; i++){
+    allRealizedObj[i].tempMOM = allRealizedObj[i].MOM;
+    allRealizedObj[i].stepsTaken = 0;
+    log("allRealizedObj[i].obj at end of actualize"+allRealizedObj[i].obj)
+    log("allRealizedObj[i].CON at end of actualize"+allRealizedObj[i].CON)
+    log("allRealizedObj[i].type at end of actualize!!!!!!"+allRealizedObj[i].type)
+    log("allRealizedObj[i].obj.get(name) at end of actualize!!!!!!!!!!!!"+allRealizedObj[i].obj.get("name"))
+    
+    };
+    moveStable()
+};
+
+on ("chat:message", function(msg) {
+    if (msg.type == "api" && msg.content.indexOf("!actualize") !== -1){
+        var plyrNmbr = state.playerIndex.indexOf(msg.playerid)  
+        actualizer(plyrNmbr);
+        
+    };
+});  
