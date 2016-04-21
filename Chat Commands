@@ -1,0 +1,97 @@
+//calls the function puzzle() to create 9 "soulSlots", the puzzlebox of the game
+on ("chat:message", function(msg) {
+    if ((msg.type == "api" && msg.content.indexOf("!startgame") !== -1)&& (state.playerIndex.length !==0)){ 
+        for (var x = 0; x<(state.playerIndex.length); x++){
+            if ((state.playerCharInfo[x].plyrObj).get("_online")!==false){
+                for (var i = 0; i<9; i++){
+                    puzzle (i,state.playerIndex[x],x);
+                    elemStart(i,x);
+                }
+                placerCreate(0,0,state.playerIndex[x],(x + 1));
+                lvlDisplay(x);
+                diffDisplay(x);
+                gameOn[0].onSwitch = 0;
+                elemDisplay(x);
+                placeAura(x);
+                for(var q=0;q<2;q++){
+                    drawStableDirection(x,0,q);
+                }
+                for (var y=0;y<3;y++){     
+                    log("elemBonus fires with"+x+y);
+                    elemBonus(x,y);
+                };
+                
+                log ("playerNUmberStart"+(x))
+            };
+        };    
+    };
+});    
+
+    
+
+//calls function elemStart() to fill the 9 soul slots with random elements
+//on ("chat:message", function(msg) {
+//    if (msg.type == "api" && msg.content.indexOf("!fillsoul") !== -1) {
+//        for (var x = 0; x<5; x++){
+//            if (state.playerNumber[x]._id !==0){
+//                for (var i = 0; i < 9; i++){
+//                   elemStart(i,x);
+//                };
+//            }
+//        }
+//    }    
+//}); 
+
+//calls function elemInsert to insert a random element in one of the 5 outer soul slots (left and top sides of puzzlebox)
+on ("chat:message", function(msg) {
+    if (msg.type == "api" && msg.content.indexOf("!insert") !== -1) {
+        var plyrNmbr = state.playerIndex.indexOf(msg.playerid);
+        var elem=Math.floor(Math.random() * 6);
+        var slot=Math.floor(Math.random() * 6);
+        randomInsert (elem,slot,plyrNmbr);
+                
+        log("insertPlayerNmbr"+plyrNmbr);
+    }
+});    
+
+//calls the function moveElem to create the proper interaction between inserted random element and the previous element in the same Soul slot 
+on ("chat:message", function(msg) {
+    if (msg.type == "api" && msg.content.indexOf("!moveElem") !== -1) { 
+        var plyrNmbr = state.playerIndex.indexOf(msg.playerid);        
+        moveElem(transElem[plyrNmbr].slot, plyrNmbr);
+    }    
+});
+
+//To insert a chosen element, use the format: "!choice"+"[slot number]"+"[elementNumber]". 
+//The Slot numbers are 0-5 starting left bottom corner and going to right upper corner. Elem numbers 0-5
+on ("chat:message", function(msg) {
+    if (msg.type == "api" && msg.content.indexOf("!choice") !== -1) {
+        var slot = msg.content.charAt(7);
+        var elem = msg.content.charAt(8);
+        if ((slot>=0 && slot<6) && (elem>=0 && elem<6)){    
+            var plyrNmbr = state.playerIndex.indexOf(msg.playerid);
+                choiceInsert(elem,slot,plyrNmbr);
+        };    
+    };
+}); 
+
+//on ("chat:message", function(msg) {
+//    if (msg.type == "api" && msg.content.indexOf("!placer") !== -1) { 
+//        placerCreate(0,0);    
+//    }
+//});
+
+//This chat promt selects an element for a maker slot. Type !maker(0-2)(0-5).
+on ("chat:message", function(msg) {
+    if (msg.type == "api" && msg.content.indexOf("!maker") !== -1) {
+        var placer = msg.content.charAt(6);
+        var elem = msg.content.charAt(7);
+        if ((placer>=0&&placer<4)&&(elem>=0&&elem<6)){
+            
+            var plyrNmbr = state.playerIndex.indexOf(msg.playerid);
+            state.makerElem[plyrNmbr][placer].element=elem;
+            log("makerElem ID="+state.makerElem[plyrNmbr][placer]._id)
+            elemDisplay(plyrNmbr,placer);
+        }    
+    }   
+}); 
