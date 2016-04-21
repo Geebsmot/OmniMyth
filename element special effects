@@ -1,0 +1,145 @@
+//////////////ENERGY SPECIALS
+
+var solidSpecialEffect = function(obj1,obj2){
+    var sizeDecrease = Math.floor(obj1.INT/2)
+    var oldSize = obj2.size
+    var newSize = Math.floor(oldSize - sizeDecrease)
+    log("oldsize and newSize at solid special effect "+oldSize+" "+newSize)
+    
+    if (newSize<0){newSize = 0}
+    if (newSize!==oldSize){
+        var oldObj = obj2.obj
+        
+        obj2.obj = createObj("graphic",{
+        name: oldObj.get("name"),
+        imgsrc: tableElementTypes[1][newSize][obj2.element].imgsrc,
+        left:oldObj.get("left"),
+        top:oldObj.get("top"),
+        width:70,
+        height:70,
+        pageid:Campaign().get("playerpageid"), 
+        layer:"map",
+        });
+        
+        oldObj.remove()
+    }
+};
+
+var lifeSpecialEffect = function(obj1,obj2){
+    obj2.STA+=obj1.INT
+    if(obj2.STA<=0){obj2.obj.remove()}
+};
+
+var radiantSpecialEffect = function(obj1,obj2){
+    var sizeIncrease = Math.floor(obj1.INT/2)
+    var oldSize = obj2.size
+    var newSize = Math.floor(oldSize + sizeIncrease)
+    log("oldsize and newSize at radiant special effect "+oldSize+" "+newSize)
+    
+    if (newSize<0){newSize = 0}
+    if (newSize!==oldSize){
+        var oldObj = obj2.obj
+        
+        obj2.obj = createObj("graphic",{
+        name: oldObj.get("name"),
+        imgsrc: tableElementTypes[1][newSize][obj2.element].imgsrc,
+        left:oldObj.get("left"),
+        top:oldObj.get("top"),
+        width:70,
+        height:70,
+        pageid:Campaign().get("playerpageid"), 
+        layer:"map",
+        });
+        
+        oldObj.remove()
+    }
+};
+
+var voidSpecialEffect = function(obj1,obj2){
+    obj2.STA-=obj1.INT
+    if(obj2.STA<=0){obj2.obj.remove()}
+};
+
+
+////////////////////////STABLE SPECIALS
+
+
+var stableSpecialPasser = function(element, obj1){
+    if (+element = 0){solidStableSpecial(obj1)}; 
+    if (+element = 1){flowStableSpecial(obj1)}; 
+    if (+element = 2){lifeStableSpecial(obj1)}; 
+    if (+element = 3){radiantStableSpecial(obj1)}; 
+    if (+element = 4){scatterStableSpecial(obj1)}; 
+    if (+element = 5){voidStableSpecial(obj1)}; 
+}
+
+
+
+
+
+var solidStableSpecial = function(obj1){
+    obj1.STAcollisionModifier = Math.round(obj1.STA*0.5)
+    obj1.size-=1
+    obj1.collisionSpecial = 0
+}
+
+var radiantStableSpecial = function(obj1){
+    obj1.MAScollisionModifier = Math.round(obj1.MAS*0.5)
+    obj1.size +=1
+    obj1.collisionSpecial = 0
+}
+
+var flowStableSpecial = function(obj1){
+    
+    //obj1.controlModifier = Math.round(obj1.control*0.5)
+    
+    obj1.collisionSpecial = function(obj1, obj2){
+        if (obj1.size>obj2.size){
+            var sizeDiff = (obj1.size-obj2.size)
+            var flowStableSplit = tempObjTemplate
+            
+        flowStableSplit.obj = createObj("graphic",{
+        name: "flowStableSplit"+ String(allRealizedObj.length),
+        imgsrc: tableElementTypes[1][1][sizeDiff].imgsrc,
+        left:obj1.obj.get(left)+(Math.floor(Math.random()*3)+-1)*70,
+        top:obj1.obj.get(left)+(Math.floor(Math.random()*3)+-1)*70,
+        width:70,
+        height:70,
+        pageid:Campaign().get("playerpageid"), 
+        layer:"map",
+    });
+        
+        flowStableSplit._id = flowStableSplit.obj.id
+        flowStableSplit.leftPos = flowStableSplit.obj.get("left");
+        flowStableSplit.topPos = flowStableSplit.obj.get("top");
+        flowStableSplit.element = 1
+        flowStableSplit.type = 1
+        
+        allRealizedObj.push(flowStableSplit)
+        }
+    }
+}
+
+var scatterStableSpecial = function(obj1){
+    obj1.shapingDifficultyModifier = (-1*obj1.MAS)
+    obj1.collisionSpecial = function(obj1){
+    }
+}
+
+var lifeStableSpecial = function(obj1){
+    obj1.collisionSpecial = function(obj1,obj2){
+        if(obj2.element!==5){
+            obj2.MAS+=obj1.MAS;
+            obj1.MAS=0;
+        }
+    }    
+}    
+
+var voidStableSpecial = function(obj1){
+    obj1.collisionSpecial = function(obj1){
+        if(obj2.element!==2){
+            obj2.MAS-=obj1.MAS;
+            obj1.MAS+=obj2.MAS;
+        }
+    }    
+}
