@@ -1,0 +1,679 @@
+var tableElemAuras = [
+    {"name":"solAura","type":0,"element":0,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925039/P4lw1YJV1hq8816hhJIR7A/thumb.png?1451801238"},
+    {"name":"flowAura","type":0,"element":1,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925019/qTh62QhkaVkTTDjJEiMlxQ/thumb.png?1451801187"},
+    {"name":"lifeAura","type":0,"element":2,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925038/eh72XjCLD1Qz-j-6mVhpcA/thumb.png?1451801233"},
+    {"name":"radAura","type":0,"element":3,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925092/SwxXOqlFAA_PTtN6WAnP4w/thumb.png?1451801475"},
+    {"name":"scatAura","type":0,"element":4,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925046/3lB7HZHAqAJZX7sv9qxIfA/thumb.png?1451801265"},
+    {"name":"voidAura","type":0,"element":5,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925041/cgu0avh1hNOlL9WLiuBenQ/thumb.png?1451801244"},
+    ];
+
+var tableElemEssence =  [
+    {"name":"solEss","type":2,"element":0,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925126/apP5hq50o-bTlH3E7YQQUA/thumb.png?1451801600"},
+    {"name":"flowEss","type":2,"element":1,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925119/v1u0C2PQTdVHbaY2bZfbew/thumb.png?1451801571"},
+    {"name":"lifeEss","type":2,"element":2,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925121/lYFzayzh9IBoUSWKg330-Q/thumb.png?1451801577"},
+    {"name":"radEss","type":2,"element":3,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925122/A_Jsq7RmcIHPOEhKwitJyw/thumb.png?1451801583"},
+    {"name":"scatEss","type":2,"element":4,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925125/1LEQjiZC-THxrcGzir49aw/thumb.png?1451801594"},
+    {"name":"voidEss","type":2,"element":5,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925127/Y8yIdXO1BVctvhx8V27Dqw/thumb.png?1451801605"},
+    ];
+
+var tableElemStableTin = [
+    {"name":"solStaTin","type":1,"element":0,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925232/lLbaQbnBjct24qYv7c2GNQ/thumb.png?1451801972"},
+    {"name":"flowStaTin","type":1,"element":1,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925180/983Eheb6gPVGJ2BgSp-1dg/thumb.png?1451801738"},
+    {"name":"lifeStaTin","type":1,"element":2,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925131/-dhMSCvHILvBxdymVU_Ksg/thumb.png?1451801633"},
+    {"name":"radStaTin","type":1,"element":3,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925217/DXz8WRxahzfTkP6tXFNX7A/thumb.png?1451801897"},
+    {"name":"scatStaTin","type":1,"element":4,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925224/8PiNnTebWl5Of_pJPl4FVg/thumb.png?1451801925"},
+    {"name":"voidStaTin","type":1,"element":5,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925239/_t_9Gp1oTukZOSTDSnhTFQ/thumb.png?1451802003"},
+    ];
+
+var tableElemStableSma = [
+    {"name":"solStaSma","type":1,"element":0,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925231/ZikxWpqYW4kn-vrxVgEgbg/thumb.png?1451801964"},
+    {"name":"flowStaSma","type":1,"element":1,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925178/pq8lC3Z6k33MLUhS5coBVA/thumb.png?1451801719"},
+    {"name":"lifeStaSma","type":1,"element":2,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925202/pUk4_zNbiIQQpXLq8nnQ2w/thumb.png?1451801856"},
+    {"name":"radStaSma","type":1,"element":3,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925215/JiVeWdXLbHOrMX_9JWExsQ/thumb.png?1451801891"},
+    {"name":"scatStaSma","type":1,"element":4,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925222/KbzORLK4qNAeNiNgbxn57Q/thumb.png?1451801918"},
+    {"name":"voidStaSma","type":1,"element":5,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925237/YYB3zw2k6M9nxkjlYopGLA/thumb.png?1451801996"},
+    ];
+
+var tableElemStableMed = [
+    {"name":"solStaMed","type":1,"element":0,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925230/6jOKYqXVNfesdgL4m7MfnQ/thumb.png?1451801959"},
+    {"name":"flowStaMed","type":1,"element":1,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925176/Z0fpdj5HGRb5qWXqsW8wyA/thumb.png?1451801711"},
+    {"name":"lifeStaMed","type":1,"element":2,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925201/hREe19TsTMr1ut2u1wSyzA/thumb.png?1451801843"},
+    {"name":"radStaMed","type":1,"element":3,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925213/S_fleVkL9QfQOCXp6iTIBw/thumb.png?1451801886"},
+    {"name":"scatStaMed","type":1,"element":4,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925296/RwAgAXwTo55ECQFZQW1dag/thumb.png?1451802225"},
+    {"name":"voidStaMed","type":1,"element":5,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925236/G4a4RVKHAYTfwHbuKZsqIQ/thumb.png?1451801990"},
+    ];
+
+var tableElemStableLar = [
+    {"name":"solStaLar","type":1,"element":0,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925228/xOgkL7NduQBSTHMKJLVX6g/thumb.png?1451801946"},
+    {"name":"flowStaLar","type":1,"element":1,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925173/MN4eZ5u_OoJHeMYys5bPLg/thumb.png?1451801702"},
+    {"name":"lifeStaLar","type":1,"element":2,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925192/zAJU-3rjnWA7bI4qEe_XjA/thumb.png?1451801803"},
+    {"name":"radStaLar","type":1,"element":3,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925212/1II_24SPMZHs1YCybrH2mg/thumb.png?1451801881"},
+    {"name":"scatStaLar","type":1,"element":4,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925288/7Lt-lCqpSszZDcbofVvb_w/thumb.png?1451802204"},
+    {"name":"voidStaLar","type":1,"element":5,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925235/tqKMw2PJXh59kK6tZhwOLg/thumb.png?1451801983"},
+    ];
+
+var tableElemStableGre = [
+    {"name":"solStaGre","type":1,"element":0,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925228/xOgkL7NduQBSTHMKJLVX6g/thumb.png?1451801946"},
+    {"name":"flowStaGre","type":1,"element":1,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925131/-dhMSCvHILvBxdymVU_Ksg/thumb.png?1451801633"},
+    {"name":"lifeStaGre","type":1,"element":2,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925190/ToPHQG9UmYO2CUpOnwtA1A/thumb.png?1451801798"},
+    {"name":"radStaGre","type":1,"element":3,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925208/_M7NWaH00laU2pegygveTQ/thumb.png?1451801877"},
+    {"name":"scatStaGre","type":1,"element":4,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925222/KbzORLK4qNAeNiNgbxn57Q/thumb.png?1451801918"},
+    {"name":"voidStaGre","type":1,"element":5,"imgsrc":"https://s3.amazonaws.com/files.d20.io/images/14925233/KMu2n7x-m5arJ8HiORjWUg/thumb.png?1451801977"},
+    ];
+
+var tableElemStable = [tableElemStableTin,tableElemStableSma,tableElemStableMed,tableElemStableLar,tableElemStableGre]
+
+var tableElementTypes = [tableElemAuras,tableElemStable,tableElemEssence];
+
+var newEffectTemplate = [];
+
+var energyEffects = [];
+
+var directionTranslator = [
+    {"directionNumber":0,"transLeft":1,"transTop":0,"arrowRotIn":1,"arrowRotOut":5,"xcomp":1,"ycomp":0},
+    {"directionNumber":1,"transLeft":1,"transTop":1,"arrowRotIn":2,"arrowRotOut":6,"xcomp":0.7,"ycomp":0.7},
+    {"directionNumber":2,"transLeft":0,"transTop":1,"arrowRotIn":3,"arrowRotOut":7,"xcomp":0,"ycomp":1},
+    {"directionNumber":3,"transLeft":-1,"transTop":1,"arrowRotIn":0,"arrowRotOut":4,"xcomp":-0.7,"ycomp":0.7},
+    {"directionNumber":4,"transLeft":-1,"transTop":0,"arrowRotIn":0,"arrowRotOut":0,"xcomp":-1,"ycomp":0},
+    {"directionNumber":5,"transLeft":-1,"transTop":-1,"arrowRotIn":4,"arrowRotOut":0,"xcomp":-0.7,"ycomp":-0.7},
+    {"directionNumber":6,"transLeft":0,"transTop":-1,"arrowRotIn":7,"arrowRotOut":3,"xcomp":0,"ycomp":-1},
+    {"directionNumber":7,"transLeft":1,"transTop":-1,"arrowRotIn":6,"arrowRotOut":2,"xcomp":0.7,"ycomp":-0.7},
+    {"directionNumber":8,"transLeft":1,"transTop":-1,"arrowRotIn":5,"arrowRotOut":1,"xcomp":1,"ycomp":0},
+    ];
+
+var propertySwapper = function(obj1, obj2){
+    var properties = Object.getOwnPropertyNames(obj1)
+    for(z=0;z<properties.length;z++){
+        var propertyName = properties[z]
+        obj2[String(propertyName)] = obj1[String(propertyName)];
+    }
+}
+
+
+var vectorComponents = function(obj1){
+    if ((obj1.type == 1)&&(obj1.direction!==undefined)){
+        obj1.vectorMag = obj1.tempMOM*obj1.MAS;
+        log("STABLE obj1.vectorMag"+obj1.vectorMag);
+        obj1.magX = +obj1.vectorMag * +directionTranslator[+obj1.direction].xcomp;
+        log("STABLE obj.magX at vectorcomponents"+obj1.magX);
+        obj1.magY = +obj1.vectorMag * +directionTranslator[+obj1.direction].ycomp;
+        log("STABLE obj1.magY"+obj1.magY);
+    }
+    if ((obj1.type == 0)&&(obj1.direction!==undefined)){
+        obj1.vectorMag = obj1.INT;
+        log("ENERGY obj1.vectorMag"+obj1.vectorMag);
+        obj1.magX = (+obj1.vectorMag * +directionTranslator[(+obj1.direction)].xcomp);
+        log("ENERGY obj1.magX"+obj1.magX);
+        obj1.magY = (+obj1.vectorMag * +directionTranslator[(+obj1.direction)].ycomp);
+        log("ENERGY obj1.magY"+obj1.magY);
+    }    
+}
+
+var vectorSumEn = function(obj1,force1){
+    var newX = (obj1.magX + force1.magX);
+    var newY = (obj1.magY + force1.magY);
+    log("newx, newY magnitudes at trig "+newX+" "+newY);
+    var tangent = (newY/newX);
+    var combinedMag = Math.sqrt((newY*newY)+(newX*newX));
+    log("combinedMag at trig"+combinedMag)
+    obj1.tempMOM = Math.round(combinedMag/obj1.MAS)
+    log("STABLE obj new tempMOM at trig function"+obj1.tempMOM)
+    obj1.MOM = obj1.tempMOM + obj1.tempMOMspent
+    log("STABLE obj1 MOM at trig function"+obj1.MOM)
+        if (tangent > -2.414 && tangent<=-0.414 && newX>0 && newY>0){
+            obj1.direction = 1
+        }
+        else if (tangent > -0.414 && tangent<=0.414 && newX>0){
+            obj1.direction = 0
+        }
+        else if (tangent >= 0.414 && tangent<2.414 && newY>0 && newX<0){
+            obj1.direction = 3
+        }
+        else if (tangent > -2.414 && tangent<=2.414 && newY>0){
+            obj1.direction = 2
+        }
+        else if (tangent >= -0.414 && tangent <-2.414 && newY<0 && newX<0){
+            obj1.direction = 5
+        }
+        else if (tangent > -0.414 && tangent<=0.414 && newX<0){
+            obj1.direction = 4
+        }
+        else if (tangent > 0.414 && tangent<=2.414 && newY<0 && newX>0){
+            obj1.direction = 7
+        }
+        else if (tangent >= -2.414 && tangent<2.414 && newY<0){
+            obj1.direction = 6
+        }
+    changeArrow(obj1)    
+}
+
+var changeArrow = function(obj1){
+    if(obj1.arrowObj !==undefined){
+        obj1.arrowObj.remove()
+    
+    
+        obj1.arrowObj = createObj("graphic", {
+                 name: "DirectionArrow",
+                imgsrc: stableDirectionArrow,
+                left: obj1.obj.get("left") + 30,
+                top: obj1.obj.get("top") - 30,
+                width:20,
+                height:20,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"map",
+                rotation: (obj1.direction) * 45,
+                controlledby: obj1.obj.get("controlledby")
+                });
+    };            
+};
+
+on ("chat:message", function(msg) {
+    if ((msg.type == "api" && msg.content.indexOf("!stepMove") !== -1)&& (state.playerIndex.length !==0)){ 
+        moveStable()
+    }    
+});
+var removalList = []
+var removalListTemplate = []
+var MOMtracker = 0;
+var CONtracker = 0;
+var moveTimer = 0;
+
+var moveStable = function(){
+    
+    log("moveStable fires")
+    
+    for(var x = 0; x<(allRealizedObj.length); x++){
+        allRealizedObj[x].tempMOM = allRealizedObj[x].MOM;
+        allRealizedObj[x].tempMOMspent = 0;
+        MOMtracker += +allRealizedObj[x].tempMOM;
+        log("MOMtracker at moveStable"+MOMtracker);
+        //log("allRealizedObj[x].obj at moveStable"+allRealizedObj[x].obj)
+        log("allRealizedObj[x].type at moveStable"+allRealizedObj[x].type)
+        
+    
+        allRealizedObj[x].tempCON = allRealizedObj[x].CON
+        CONtracker += +allRealizedObj[x].tempCON;
+        log("CONtracker at moveStable"+CONtracker)
+        //log("allRealizedObj[x].tempCON at move stable"+allRealizedObj[x].tempCON);
+    };
+    
+    if ((MOMtracker!==0)||(CONtracker!==0)){
+       log("moveStable progresses");
+       //log("allRealizedObj.length pass to trackMoves"+allRealizedObj.length);
+       moveTimer = setInterval(function(){
+                trackMoves(allRealizedObj)
+            },2000);
+    }
+}
+
+var removeSpent = function(effect){
+    log("removeSpentFires");
+    log("effect.tempCON at remove spent "+effect.tempCON)
+    if(effect.tempCON>0){
+        return effect
+    }
+}    
+//var removeSpent = function(effect){
+//    log("removeSpentFires");
+    //var removalNumber = -1
+//    for(var p = 0; p<allRealizedObj.length; p++){
+//        log("allrealizedOBj.tempCON at removeSpent "+allRealizedObj[p].tempCON)
+//        if ((allRealizedObj[p].tempCON<=0)&&(allRealizedObj[p].type==0)){           //&&(allRealizedObj[i].obj==undefined)
+            //removalNumber = i;
+//            if (effect.baseObjId !== allRealizedObj[p]._id){
+//            return effect
+//            }
+//        }
+//    }
+//}
+
+var removeSpentAllRealized = function(allRealizedObj){
+    log("removeSpent ALL REALIZEDFires");
+        if (((allRealizedObj.obj!=undefined)&&(allRealizedObj.type==1))||((allRealizedObj.type==0)&&(allRealizedObj.tempCON>0))){
+            return allRealizedObj
+    }
+}
+
+var trackMoves = function(allRealizedObj){
+    if ((MOMtracker<=0)&&(CONtracker<=0)){
+        clearInterval(moveTimer);
+        log("clearInterval fires")
+        log("allRealizedObj.length at track moves ending "+allRealizedObj.length)
+        for (var z=0; z<allRealizedObj.length;z++){
+            if (allRealizedObj[z].type==1){
+                allRealizedObj[z].STA-=1
+                if (allRealizedObj[z].STA<=0){
+                    allRealizedObj.obj.remove()
+                    allRealizedObj.arrowObj.remove()
+                    //allRealizedObj.splice(z, 1)
+                }
+            }
+            if ((allRealizedObj[z].tempCON<=0)&&(allRealizedObj[z].type == 0)){
+                log("EnergyEffect clearing statement fires");
+                //log("allRealizedObj.id at clearing statement"+allRealizedObj.id)
+                if ((allRealizedObj[z].obj==undefined)&&(allRealizedObj[z].hasEffects==1)){
+                //log("remove energyEffect.obj fires!!!")
+                    for(var x=0;x<energyEffects.length;x++){
+                        if(energyEffects[x].baseObjId==allRealizedObj[z]._id){
+                             if(energyEffects[x].arrowObj!=undefined){
+                                 energyEffects[x].arrowObj.remove()     
+                             };
+                             //removalList.push(z);
+                             energyEffects[x].obj.remove();
+                            //energyEffects.splice(z, 1)
+                        }   
+                    }
+                }
+                if (allRealizedObj[z].obj!==undefined){
+                    allRealizedObj[z].obj.remove()
+                }
+            }
+        }
+        
+    log("1energyEffects.length"+energyEffects.length)
+    energyEffects = energyEffects.filter(removeSpent);
+    log("2energyEffects.length"+energyEffects.length)
+    allRealizedObj = allRealizedObj.filter(removeSpentAllRealized)
+    log("allRealizedobj.length at track moves"+allRealizedObj.length)
+    }
+    
+    else{
+        for(var i = 0; i<allRealizedObj.length; i++){
+            log("allRealizedObj[i].obj at trackMoves"+allRealizedObj[i].obj);
+            log("CONtracker at trackMoves"+CONtracker);
+            //log("allRealizedObj[i].obj at trackMoves"+allRealizedObj[i].obj);
+            //log("allRealizedObj[i].tempCON"+allRealizedObj[i].tempCON);
+            if ((allRealizedObj[i].tempCON>0)&&(allRealizedObj[i].obj!==undefined)){
+                log("allRealizedObj[i].tempCON in start of track moves"+allRealizedObj[i].tempCON)
+                var energyObj = allRealizedObj[i];
+                energyExpress(energyObj);
+                for(var y = 0; y<energyEffects.length;y++){
+                    if (energyEffects[y].baseObjId == allRealizedObj[i]._id){
+                        energyEffects[y].tempCON-=1
+                        log("energyEffects[y].tempCON at track Moves "+energyEffects[y].tempCON)
+                    }
+                }
+                allRealizedObj[i].tempCON-=1
+                CONtracker -=1;
+                log("allRealizedObj[i].tempCON at end of track moves"+allRealizedObj[i].tempCON)
+            }
+            else if((allRealizedObj[i].tempCON>0)&&(allRealizedObj[i].obj==undefined)){
+                for(var y = 0; y<energyEffects.length;y++){
+                    if (energyEffects[y].baseObjId == allRealizedObj[i]._id){
+                        energyEffects[y].tempCON-=1
+                        log("energyEffects[y].tempCON at track Moves "+energyEffects[y].tempCON)
+                    }
+                }    
+                allRealizedObj[i].tempCON-=1
+                CONtracker -=1
+                log("allRealizedObj[i].tempCON at end of track moves"+allRealizedObj[i].tempCON)
+            }
+            else if ((allRealizedObj[i].tempCON<=0)&&(allRealizedObj[i].type == 0)){
+                log("EnergyEffect clearing statement fires");
+                if ((allRealizedObj[i].obj==undefined)&&(allRealizedObj[i].hasEffects==1)){
+                    for(var x=0;x<energyEffects.length;x++){
+                        if(energyEffects[x].baseObjId==allRealizedObj[z]._id){
+                            if(energyEffects[x].arrowObj!=undefined){
+                                energyEffects[x].obj.remove()     
+                            }
+                            energyEffects[x].obj.remove()
+                        }
+                    }   
+                }
+                if (allRealizedObj[i].obj!==undefined){
+                    allRealizedObj[i].obj.remove()
+                }
+            }    
+            else if ((allRealizedObj[i].tempMOM>0)&&(allRealizedObj[i].obj!==undefined)){
+                //log("allRealizedObj[i].tempMOM at moveStable"+allRealizedObj[i].tempMOM);
+                stableMotion(i);
+            }
+        }        
+    }
+    collisionCheck();   
+}
+
+var stableMotion = function(i){
+    var dir = allRealizedObj[i].direction;
+                log("allRealizedObj[i].obj at stable motion"+allRealizedObj[i].obj);
+                allRealizedObj[i].obj.set("left", allRealizedObj[i].obj.get("left") + (70*directionTranslator[dir].transLeft));
+                allRealizedObj[i].leftPos =  allRealizedObj[i].obj.get("left");
+                allRealizedObj[i].arrowObj.set("left", allRealizedObj[i].arrowObj.get("left") + (70*directionTranslator[dir].transLeft));
+                allRealizedObj[i].obj.set("top", allRealizedObj[i].obj.get("top") + (70*directionTranslator[dir].transTop));
+                allRealizedObj[i].topPos = allRealizedObj[i].obj.get("top");
+                allRealizedObj[i].arrowObj.set("top", allRealizedObj[i].arrowObj.get("top") + (70*directionTranslator[dir].transTop));
+                allRealizedObj[i].tempMOM-=1;
+                allRealizedObj[i].tempMOMspent+=1;
+                allRealizedObj[i].stepsTaken+=1;
+                MOMtracker -=1; 
+}
+
+var energyExpress = function(energyObj){
+    log("energyExpress Fires with this obj:"+energyObj.obj);
+    //log("element at energy express"+energyObj.element);
+    //log("energyEffects.length at energyEffect"+energyEffects.length)
+    if (energyObj.tempCON !==0){
+    
+        if (energyObj.element == 0){
+            solidEnergyEffect(energyObj)
+        };
+        
+        if (energyObj.element == 1){
+            flowEnergyEffect(energyObj)
+        };
+        
+        if (energyObj.element == 2){
+            lifeEnergyEffect(energyObj)
+        };
+        if (energyObj.element == 3){
+            radiantEnergyEffect(energyObj)
+        };
+        if (energyObj.element == 4){
+            scatterEnergyEffect(energyObj)
+        };
+        if (energyObj.element == 5){
+            voidEnergyEffect(energyObj)
+        };
+    //energyObj.tempCON -=1;
+    };
+};
+
+var solidEnergyEffect = function(energyObj){
+    log("stableEnergyEffect fires");
+    //var newEffectParent = energyObj
+    for(i=0;i<9;i++){
+        var solidEnEff = solidEn(energyObj)
+            solidEnEff(i)
+        
+        //log("energyEffects.length at solidEffect"+energyEffects.length);
+        //log("energyEffects[length-1].obj.get(left) at solid energy"+energyEffects[(energyEffects.length- 1)].obj.get("left"))
+        //log("energyEffects[0].obj.get(left) at solid energy"+energyEffects[0].obj.get("left"))
+        //log("energyEffects[length-1].type at solid energy"+energyEffects[(energyEffects.length- 1)].type)
+        //log("energyEffects[0].obj.get(name) at solid energy"+energyEffects[0].obj.get("name"))
+        //solidEnPlaced +=1
+    }
+    energyObj.obj.remove();
+    energyObj.obj = undefined;
+    energyObj.hasEffects = 1;
+}
+
+
+function solidEn(energyObj){
+    var effect = {};
+    propertySwapper(energyObj, effect);
+    energyEffects.push(effect);
+    //var eslot = energyEffects.length - 1
+    //log("eslot at solidEn"+eslot)
+    return function (i){
+            var posLeft = ((+energyObj.leftPos - 70)+((i%3)*70))
+            var posTop = ((+energyObj.topPos - 70)+((Math.floor(i/3))*70))
+            var index = allRealizedObj.indexOf(energyObj)
+            effect.baseObjIndex = index
+            effect.baseObjId = energyObj._id
+            var arrowRot = directionTranslator[i].arrowRotIn*45
+            effect.direction = directionTranslator[i].arrowRotIn
+        
+        effect.obj = createObj("graphic",{
+                name: "solidEnergy"+i,
+                imgsrc: energyObj.obj.get("imgsrc"),
+                left: posLeft,
+                top: posTop,
+                width:70,
+                height:70,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"map",
+             });
+             //energyEffect[eslot].obj = effect
+    
+        if (i!==4){        
+            var newEffectArrow = createObj("graphic",{
+            name: "solidEffectArrow",
+            imgsrc:"https://s3.amazonaws.com/files.d20.io/images/15050334/G4Oz9nc2txZffrLCAtW4Ow/thumb.png?1452203481",
+            left: posLeft - 30,
+            top: posTop - 30,
+            width:20,
+            height:20,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+            rotation: arrowRot,
+                
+            });
+   
+            newEffectArrow.baseObjIndex = index;
+            effect.arrowObj = newEffectArrow
+        }
+        else if (i==4){
+            effect.direction = undefined
+            effect.specialEffect = 0
+        }; 
+        //log("effect.obj.get(left) at solid energy"+effect.obj.get("left"))
+    }    
+}
+
+
+var flowEnergyEffect = function(energyObj){
+    for(i=0;i<energyObj.INT;i++){
+        
+        var effect = {};
+        propertySwapper(energyObj, effect);
+        energyEffects.push(effect);
+        var index = allRealizedObj.indexOf(energyObj)
+        effect.baseObjIndex = index
+        effect.baseObjId = energyObj._id
+        effect.INT -= i;
+        
+        var dirLeft = directionTranslator[+energyObj.direction].transLeft;
+        var dirTop =  directionTranslator[+energyObj.direction].transTop;
+    
+        effect.obj = createObj("graphic",{
+            name: "flowEnergy",
+            imgsrc: energyObj.obj.get("imgsrc"),
+            left: (+energyObj.leftPos + ((i*70)*dirLeft)),
+            top: (+energyObj.topPos + ((i*70)*dirTop)),
+            width:70,
+            height:70,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+    
+        });
+        
+        //energyObj.hasEffects = 1
+        //energyObj.effects.push(Effect);
+        
+            
+        effect.arrowobj = createObj("graphic",{
+            name: "flowEffectArrow",
+            imgsrc:"https://s3.amazonaws.com/files.d20.io/images/15050334/G4Oz9nc2txZffrLCAtW4Ow/thumb.png?1452203481",
+            left: (+energyObj.leftPos + (((i + 1)*70)*dirLeft))- 30,
+            top: (+energyObj.topPos + (((i + 1)*70)*dirTop)) - 30,
+            width:20,
+            height:20,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+            rotation: (+energyObj.direction)*45,
+                    
+        });
+    }    
+energyObj.arrowObj.remove()
+energyObj.obj.remove()
+log("energyObj.obj"+energyObj.obj)
+energyObj.obj = undefined
+energyObj.hasEffects = 1;
+};
+
+var lifeEnergyEffect = function(energyObj){
+        
+        var effect = {};
+        propertySwapper(energyObj, effect);
+        energyEffects.push(effect);
+        var index = allRealizedObj.indexOf(energyObj)
+        effect.baseObjIndex = index
+        effect.baseObjId = energyObj._id
+        effect.specialEffect = 2
+        
+        effect.obj = createObj("graphic",{
+            name: "lifeEnergy",
+            imgsrc: energyObj.obj.get("imgsrc"),
+            left: (+energyObj.leftPos),
+            top: (+energyObj.topPos),
+            width:70,
+            height:70,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+    
+        });
+    energyObj.arrowObj.remove()
+    energyObj.obj.remove()
+    log("energyObj.obj"+energyObj.obj)
+    energyObj.obj = undefined
+    energyObj.hasEffects = 1;
+};
+
+var radiantEnergyEffect = function(energyObj){
+    log("radiantEnergyEffect fires")
+    for(i=0;i<9;i++){
+                
+        var effect = {};
+        propertySwapper(energyObj, effect);
+        energyEffects.push(effect);
+        var index = allRealizedObj.indexOf(energyObj)
+        effect.baseObjIndex = index
+        effect.baseObjId = energyObj._id
+        
+        var arrowRot = directionTranslator[i].arrowRotOut*45
+        effect.direction = directionTranslator[i].arrowRotOut
+        
+        var posLeft = ((+energyObj.leftPos - 70)+((i%3)*70))
+        var posTop = ((+energyObj.topPos - 70)+((Math.floor(i/3))*70))
+            
+        effect.obj = createObj("graphic",{
+            name: "radiantEnergy",
+            imgsrc: energyObj.obj.get("imgsrc"),
+            left: posLeft,
+            top: posTop,
+            width:70,
+            height:70,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+        });
+                
+        if (i!==4){
+            effect.arrowObj = createObj("graphic",{
+            name: "stableEffectArrow",
+            imgsrc:"https://s3.amazonaws.com/files.d20.io/images/15050334/G4Oz9nc2txZffrLCAtW4Ow/thumb.png?1452203481",
+            left: posLeft - 30,
+            top: posTop - 30,
+            width:20,
+            height:20,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+            rotation: arrowRot,
+                
+            });
+            effect.specialEffect = 3
+        }
+        else if (i==4){effect.direction = undefined}; 
+        //energyObj.effects = [];
+        //energyObj.effects.push(newEffect);
+    };
+energyObj.obj.remove()
+energyObj.obj = undefined
+energyObj.hasEffects = 1;
+};
+
+var scatterEnergyEffect = function(energyObj){
+    var lastPositionLeft = energyObj.leftPos
+    var lastPositionTop = energyObj.topPos
+    var lastDirection = energyObj.direction
+    for(i=0;i<energyObj.INT;i++){
+        
+        var effect = {};
+        propertySwapper(energyObj, effect);
+        energyEffects.push(effect);
+        var index = allRealizedObj.indexOf(energyObj)
+        effect.baseObjIndex = index
+        effect.baseObjId = energyObj._id
+        effect.INT = i;
+        
+        directionRandomizer = (-1 + Math.floor(Math.random()*3))
+        
+        
+        if(i>0){
+            effect.direction = (+lastDirection + +directionRandomizer);
+            lastPositionLeft += (70*dirLeft);
+            lastPositionTop += (70*dirTop);
+        };
+        if(effect.direction==-1){effect.direction = 7};
+        if(effect.direction==8){effect.direction=0};
+        lastDirection = effect.direction;
+        
+        var dirLeft = directionTranslator[+effect.direction].transLeft;
+        var dirTop =  directionTranslator[+effect.direction].transTop;
+    
+        effect.obj = createObj("graphic",{
+            name: "scatterEnergy",
+            imgsrc: energyObj.obj.get("imgsrc"),
+            left: lastPositionLeft,
+            top: lastPositionTop,
+            width:70,
+            height:70,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+    
+        });
+        
+        //energyObj.hasEffects = 1
+        //energyObj.effects.push(Effect);
+        
+            
+        effect.arrowObj = createObj("graphic",{
+            name: "flowEffectArrow",
+            imgsrc:"https://s3.amazonaws.com/files.d20.io/images/15050334/G4Oz9nc2txZffrLCAtW4Ow/thumb.png?1452203481",
+            left: lastPositionLeft - 30,
+            top: lastPositionTop - 30,
+            width:20,
+            height:20,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+            rotation: (+effect.direction)*45,
+                    
+        });
+        lastPositionLeft = effect.obj.get("left");
+        lastPositionTop = effect.obj.get("top");
+    }    
+energyObj.arrowObj.remove()
+energyObj.obj.remove()
+log("energyObj.obj"+energyObj.obj)
+energyObj.obj = undefined
+energyObj.hasEffects = 1;
+};
+
+
+
+var voidEnergyEffect = function(energyObj){
+           
+    var effect = {};
+    propertySwapper(energyObj, effect);
+    energyEffects.push(effect);
+    var index = allRealizedObj.indexOf(energyObj)
+    effect.baseObjIndex = index
+    effect.baseObjId = energyObj._id
+    effect.specialEffect = 5
+        
+        effect.obj = createObj("graphic",{
+            name: "voidEnergy",
+            imgsrc: energyObj.obj.get("imgsrc"),
+            left: (+energyObj.leftPos),
+            top: (+energyObj.topPos),
+            width:70,
+            height:70,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+    
+        });
+    energyObj.arrowObj.remove()
+    energyObj.obj.remove()
+    log("energyObj.obj"+energyObj.obj)
+    energyObj.obj = undefined
+    energyObj.hasEffects = 1;
+};
