@@ -139,3 +139,82 @@ var moveElem = function (slotNumber, plyrNmbr) {
             };
 
 };
+
+
+
+
+
+//This function is called to insert a random element into the left or top of the puzzlebox
+var randomInsert = function (elem, slot, plyrNmbr) {
+        'use strict';
+        
+        var actualSlot = randomNumber[slot].actualSlot;
+       
+            if(slot<3){
+                transElem[plyrNmbr].direction=3
+            }
+            else{
+                transElem[plyrNmbr].direction=1
+            };
+            
+    transElem[plyrNmbr].elemObj = createObj("graphic", {
+                name: element[elem].name,
+                imgsrc: element[elem].type,
+                left:playerSoul[plyrNmbr][actualSlot].leftPos,
+                top:playerSoul[plyrNmbr][actualSlot].topPos,
+                width:70,
+                height:70,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"objects",
+                controlledby: state.playerIndex[plyrNmbr],
+        });
+        
+        transElem[plyrNmbr].elemId = (transElem[plyrNmbr].elemObj).id
+        transElem[plyrNmbr].element=elem
+        transElem[plyrNmbr].name=element[elem].name
+        transElem[plyrNmbr].leftPos=playerSoul[plyrNmbr][actualSlot].leftPos
+        transElem[plyrNmbr].topPos=playerSoul[plyrNmbr][actualSlot].topPos
+        transElem[plyrNmbr].slot=actualSlot
+        transElem[plyrNmbr].end = 0
+        
+        log ("insert location top,left"+transElem[plyrNmbr].topPos+" "+transElem[plyrNmbr].leftPos);
+        log("transElemNumber"+transElem[plyrNmbr].slot);
+        log("TransElemElem"+transElem[plyrNmbr].element)
+        
+};
+
+//This function is called to insert a chosen element from the bottom or right side fo the puzzle box
+var choiceInsert = function (elem, slot, plyrNmbr) {
+        'use strict';
+        
+        var actualSlot = chosenNumber[slot].actualSlot;
+       
+            if(slot<3){
+                transElem[plyrNmbr].direction=-1
+            }
+            else{
+                transElem[plyrNmbr].direction=-3
+            };
+            
+    transElem[plyrNmbr].elemObj = createObj("graphic", {
+                name: element[elem].name,
+                imgsrc: element[elem].type,
+                left:playerSoul[plyrNmbr][actualSlot].leftPos,
+                top:playerSoul[plyrNmbr][actualSlot].topPos,
+                width:70,
+                height:70,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"objects",
+                controlledby: state.playerIndex[plyrNmbr]
+        });
+        
+        transElem[plyrNmbr].elemId = (transElem[plyrNmbr].elemObj).id
+        transElem[plyrNmbr].element=elem
+        transElem[plyrNmbr].name=element[elem].name
+        transElem[plyrNmbr].leftPos=playerSoul[plyrNmbr][actualSlot].leftPos
+        transElem[plyrNmbr].topPos=playerSoul[plyrNmbr][actualSlot].topPos
+        transElem[plyrNmbr].slot=actualSlot
+        transElem[plyrNmbr].end = 0
+        
+        log("transElem left Pos at choice"+transElem[plyrNmbr].leftPos)
+};
