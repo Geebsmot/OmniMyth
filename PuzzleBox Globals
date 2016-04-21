@@ -1,0 +1,71 @@
+// this arrray stores the imgsrc and names of the 9 "soul slots" that make up the puzzle core of the game
+ var soul = [
+     {"slot":"https://s3.amazonaws.com/files.d20.io/images/14394262/IFrkOFc_4BC_phx5RSjomg/thumb.png?1449870272","name":"projection"},
+     {"slot":"https://s3.amazonaws.com/files.d20.io/images/14394250/j4MIyTW_vbLiBRgxW-1MHA/thumb.png?1449870257","name":"intensity"},
+     {"slot":"https://s3.amazonaws.com/files.d20.io/images/14394256/Ntj-IuNVv8FRCk3aTweQVw/thumb.png?1449870263","name":"connection"},
+     {"slot":"https://s3.amazonaws.com/files.d20.io/images/14394277/IeVsHXoULpVqUThIWIg8fQ/thumb.png?1449870303","name":"momentum"},
+     {"slot":"https://s3.amazonaws.com/files.d20.io/images/14394281/T0BDk3olgMSISJhcFDc2vw/thumb.png?1449870308","name":"mass"},
+     {"slot":"https://s3.amazonaws.com/files.d20.io/images/14394283/nuDguFrgweJ95wgUydeRJg/thumb.png?1449870312","name":"stability"},
+     {"slot":"https://s3.amazonaws.com/files.d20.io/images/14394287/qVPbra2XvF-WNMHAS5Zoqw/thumb.png?1449870319","name":"perception"},
+     {"slot":"https://s3.amazonaws.com/files.d20.io/images/14394290/0NpTFt-fgobcy5pVstTnYw/thumb.png?1449870324","name":"control"},
+     {"slot":"https://s3.amazonaws.com/files.d20.io/images/14394293/ExXltY_onzzLvVhJjB0FqA/thumb.png?1449870328","name":"creativity"}
+     ];
+
+    // this array store the imgsrc and names of the 6 different elements that can occupy the 9 soulslots
+ var element = [
+      {"type":"https://s3.amazonaws.com/files.d20.io/images/14393776/TBpjjdsymZEHvwEciezBzw/thumb.png?1449869021","name":"solid"},
+      {"type":"https://s3.amazonaws.com/files.d20.io/images/14392915/nQzZbvv9zIzISs916BC04w/thumb.png?1449867173","name":"flow"},
+      {"type":"https://s3.amazonaws.com/files.d20.io/images/14393522/FyvS4AAp9pcMF6nKephwJw/thumb.png?1449868548","name":"life"},
+      {"type":"https://s3.amazonaws.com/files.d20.io/images/14392758/lIMJBtE8cC9xufJjc1TWYQ/thumb.png?1449866822","name":"radiant"},
+      {"type":"https://s3.amazonaws.com/files.d20.io/images/14393375/MTEe5i2F0oa9Gw0mazqmag/thumb.png?1449868212","name":"scatter"},
+      {"type":"https://s3.amazonaws.com/files.d20.io/images/14393773/6fFDGaPuvjZnL2v93iuBGg/thumb.png?1449869012","name":"void"},
+      {"type":"https://s3.amazonaws.com/files.d20.io/images/14643124/0Ss58UpMBy6DN8k8Tw8HmA/thumb.png?1450729842","name":"null"},
+      ];
+  
+  // this array store the current attributes of the 9 soul slots, including thier positions and what element is inside them, and the unique _id of those elements
+  
+  var soulState = [
+      {"number":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0},
+      {"number":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0},
+      {"number":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0},
+      {"number":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0},
+      {"number":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0},
+      {"number":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0},
+      {"number":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0},
+      {"number":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0},
+      {"number":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0},
+      ];
+      
+   var playerSoul = [soulState,soulState,soulState,soulState,soulState,soulState,]  
+      
+  // this object stores the information of the inserted element, or an element moved by an inserted element (the transition element) 
+  var transElem = [
+      {"slot":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0,"end":0},
+      {"slot":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0,"end":0},
+      {"slot":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0,"end":0},
+      {"slot":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0,"end":0},
+      {"slot":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0,"end":0},
+      {"slot":0,"leftPos":0,"topPos":0,"element":0,"direction":0,"power":0,"name":0,"elemId":0,"elemObj":0,"end":0}
+      ]
+      
+      //converts a random 0-5 into slot locations (corresponding to array numbers for soul state) for random element insertion numbered starting at bottom left corner, to top right
+  var randomNumber = [
+      {"actualSlot":2,},
+      {"actualSlot":1,},
+      {"actualSlot":0,},
+      {"actualSlot":0,},
+      {"actualSlot":3,},
+      {"actualSlot":6,},
+      ];  
+
+    var chosenNumber = [
+      {"actualSlot":2,},
+      {"actualSlot":5,},
+      {"actualSlot":8,},
+      {"actualSlot":8,},
+      {"actualSlot":7,},
+      {"actualSlot":6,},
+      ];  
+      
+     
+      
