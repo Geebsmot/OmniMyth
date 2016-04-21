@@ -1,0 +1,391 @@
+var collisionCheck = function(){
+    log("collisionCheck fires")
+    //log("allRealizedObj.length at collisionCheck"+allRealizedObj.length)
+    var alreadyCollided = -1;
+    if (energyEffects.length>0){
+        for(q=0;q<energyEffects.length;q++){
+            //log("energyEffects[q].obj.get(left) at collision check"+energyEffects[q].obj.get("left"));
+            var results1 = filterObjs(function(obj) {    
+            if((obj.get("left") == energyEffects[q].obj.get("left")) && (obj.get("top") == energyEffects[q].obj.get("top"))&&(energyEffects[q].obj.get("id")!=obj.id)) return true;    
+            else return false;
+                //log ("results1 at collision check"+results1)
+            });
+            log("results1.length for this obj at collision check"+results1.length+" "+energyEffects[q].obj.get("name"));
+            //log("results1.[length-1] at collision check"+results1[(results1.length- 1)])
+            
+            for(m=0; m<results1.length; m++){ 
+                if((results1[m].get("name")).indexOf("Energy")!==-1){
+                    for(p=0;p<energyEffects.length;p++){
+                        if (energyEffects[p].obj == results1[m]) {
+                            obj3 = energyEffects[p];
+                            energyOnEnergy(energyEffects[q],obj3);
+                            log("energyEffects[q] and results[m] at collision check EnonEn" + energyEffects[q].obj.get("name")+" "+obj3.obj.get("name"));
+                        };
+                    }    
+                }
+                else if((results1[m].get("name")).indexOf("stable")!==-1){
+                    energyCollision(energyEffects[q],results1[m])
+                    log("energyEffects[q] and results[m] at colcheck ENcoll" + energyEffects[q]+" "+results1[m])
+                };
+            }    
+        }; 
+    }        
+    for(i=0; i<allRealizedObj.length; i++){
+        var results = filterObjs(function(obj) {    
+        if((obj.get("left") == allRealizedObj[i].leftPos) && (obj.get("top") == allRealizedObj[i].leftPos)) return true;    
+        else return false;
+        });
+        log("results.length at collision check"+results.length)
+        for(x=0; x<results.length; x++){
+            for(y=0; y<allRealizedObj.length; y++){
+                if (allRealizedObj[y].obj == results[x] && allRealizedObj[y]!==allRealizedObj[i] && allRealizedObj[i].type == 1 && allRealizedObj[y].type == 1 && i!==alreadyCollided){
+                        stableCollision(allRealizedObj[y], allRealizedObj[i]);
+                        alreadyCollided = y;
+                }
+            }
+        }        
+        //    for(z=0;z<energyEffects.length; z++){
+        //        if (energyEffects[z] == results[x] && i!==alreadyCollided){
+        //            energyCollision(allRealizedObj[i], energyEffects[z])
+        //        }
+        //    }    
+    }
+}
+
+var energyOnEnergy = function(obj1,obj2){
+    log("energyOnEnergy fires with"+obj1.obj.get("name")+" "+obj2.obj.get("name"))
+    if (obj1.INT>obj2.INT){obj2.obj.remove(); obj2.arrowObj.remove()}
+    else if(obj2.INT>obj1.INT){obj1.obj.remove(); obj1.arrowObj.remove()}
+    else if (obj1.INT==obj2.INT){
+        if (obj1.CON>obj2.CON){obj2.obj.remove(); obj2.arrowObj.remove()}
+        else if (obj2.CON>obj1.CON){obj1.obj.remove(); obj1.arrowObj.remove()}
+        else if (obj1.CON==obj2.CON){
+            if (Math.random()>.5){obj1.obj.remove(); obj1.arrowObj.remove()}
+            else {obj2.obj.remove(); obj2.arrowObj.remove()}
+            
+        }
+    }
+}
+
+var energyCollision = function(obj1,obj2){
+    log("obj2 name at energy collision"+obj2.get("name"))
+    var obj3 = undefined
+    for(i=0;i<allRealizedObj.length;i++){
+        if (allRealizedObj[i].obj == obj2) {
+            obj3 = allRealizedObj[i];
+            var index = i;
+        };
+    }    
+    log("obj1.obj.get(name)"+obj1.obj.get("name"))
+    log("obj1.direction"+obj1.direction)
+    if(obj3!==undefined){
+        log("obj3.direction"+obj3.direction);
+        log("obj3.obj"+obj3.obj)
+    //log("object names at energyCollision"+obj1.obj.get("name")+" "+obj2.obj.get("name"))
+    
+        vectorComponents(obj1)
+        log("obj1.magX"+obj1.magX)
+        vectorComponents(obj3)
+        log("obj3.magX"+obj3.magX)
+        //log("obj2.direction at energyCollision"+obj2.direction)
+        vectorSumEn(obj3,obj1);
+        allRealizedObj[index] = obj3;
+        sendChat("collision Announcer", "Energy on Stable collision with "+obj1.obj.get("name")+" acting on "+obj3.obj.get("name"))
+        sendChat("Collision Announcer","The new direction is "+obj3.direction)
+        
+        if(obj1.specialEffect!==undefined){
+            if (obj1.specialEffect == 0){
+                log("solid special effect at EnergyColl")
+                solidSpecialEffect(obj1,obj3)
+            }
+            if (obj1.specialEffect == 2){
+                log("life special effect at EnergyColl")
+                lifeSpecialEffect(obj1,obj3)
+            }
+             if (obj1.specialEffect == 3){
+                 log("radiant specialEffect at EnergyColl")
+                 radiantSpecialEffect(obj1,obj3)
+            }
+             if (obj1.specialEffect == 5){
+                 log("void special effect at EnergyColl")
+                 voidSpecialEffect(obj1,obj3)
+            }
+        }
+    }    
+}
+
+
+var stableCollision = function(obj1,obj2){
+    var collisionChance = 100 - (((obj1.size+ 1)*20)+((obj2.size+ 1)*20));
+        if (collisionChance <= 0){
+            collisionChance = 1;
+        }
+    
+    var collisionRoll = Math.floor(Math.random() * 100);
+    sendChat("COLLISION ANOUNCER", "Collision Chance:"+String(collisionChance)+" and Roll:"+String(collisionRoll));
+    log("stableCollision fires with objects:"+ obj1.obj.get("name") + " " + obj2.obj.get("name"))
+    log("directions before collisionobj1,2:"+obj1.direction+" "+obj2.direction);
+    log("MAS before collisionobj1,2:"+obj1.MAS+" "+obj2.MAS);
+    log("tempMOM before collisionobj1,2:"+obj1.tempMOM+" "+obj2.tempMOM);
+    if (collisionChance <= collisionRoll) {
+        var newDirection1 = 0;
+        var newDirection2 = 0;
+        
+        if (collisionChance > Math.floor(collisionRoll/2)){
+            var collType = "indirect"
+            var coinToss = Math.random()
+            if (coinToss >= 0.5){
+                newDirection1 = 1
+                newDirection2 = 1
+                var flip = 1
+            }
+            else {
+                var newDirection1 = -1
+                newDirection2 = -1
+                var flip = 2
+            }
+        }
+        else {
+            var collType = "direct"
+            var coinToss = Math.random()
+            if (coinToss < .2){
+                newDirection1 = 2
+                newDirection2 = 2
+                var flip = 1
+            }
+            else if ((coinToss>=.2)&&(coinToss<.4)){
+                newDirection1 = -2
+                newDirection2 = -2
+                var flip = 2
+            }
+            else if ((coinToss>=.4)&&(coinToss<.6)){
+                newDirection1 = -3
+                newDirection2 = -3
+                var flip = 3
+            }    
+            else if ((coinToss>=.6)&&(coinToss<.8)){
+                newDirection1 = 3
+                newDirection2 = 3
+                var flip = 4
+            }
+            else if ((coinToss>=.8)&&(coinToss<1)){
+                newDirection1 = -4
+                newDirection2 = -4
+                var flip = 5
+            };    
+        };
+        
+        log("newDirection1"+newDirection1);
+        log("newDirection2"+newDirection2);
+        log("steps taken at collision,1,2"+" "+obj1.stepsTaken +" "+ obj2.stepsTaken)
+        var checkTempMom2 = (+obj2.tempMOM - 1);
+                if (+checkTempMom2 <= 0){checkTempMom2 = 0.5};
+                log("checkTempMom2 at obj1 greater steps:"+ +checkTempMom2)
+        var checkTempMom1 = (+obj1.tempMOM - 1);
+                if (+checkTempMom1 <= 0){checkTempMom1 = 0.5}; 
+            log("checkTempMom1 at obj2 greater steps:"+ +checkTempMom1)
+            
+        if (obj1.stepsTaken > obj2.stepsTaken){
+            var damagePotential1 = Math.floor(obj1.MAS * obj1.tempMOM);
+            var damagePotential2 = Math.floor(obj2.MAS * +checkTempMom2);
+            log("damagePotential1 and damagePotential2 at obj1 greater steps taken"+ damagePotential1+" "+damagePotential2);
+        }
+        else if (obj1.stepsTaken < obj2.stepsTaken){
+            var damagePotential1 = Math.floor(obj1.MAS * +checkTempMom1);
+            var damagePotential2 = Math.floor(obj2.MAS * obj2.tempMOM);
+            log("damagePotential1 and damagePotential2 at obj2 greater steps taken"+ damagePotential1+" "+damagePotential2);
+        }
+        else{
+            var damagePotential1 = Math.floor(obj1.MAS * obj1.tempMOM);
+            var damagePotential2 = Math.floor(obj2.MAS * obj2.tempMOM);
+            log("damagePotential1 and damagePotential2 at equal steps taken"+ damagePotential1+" "+damagePotential2);
+        };
+        
+        var originDirec1 = obj1.direction
+        var origindirec2 = obj2.direction
+        var obj1UnmodDmg = damagePotential1 - obj2.STA
+            if(obj1UnmodDmg<0){obj1UnmodDmg = 0};
+        var obj1ModDmg = (Math.floor(damagePotential1*1.5) - obj2.STA)
+            if(obj1ModDmg<0){obj1ModDmg = 0};
+        var obj2UnmodDmg = damagePotential2 - obj1.STA
+            if(obj2UnmodDmg<0){obj2UnmodDmg = 0};
+        var obj2ModDmg = (Math.floor(damagePotential2*1.5) - obj1.STA)
+            if(obj2ModDmg<0){obj2ModDmg = 0};
+        var index1 = allRealizedObj.indexOf(obj1);
+        var index2 = allRealizedObj.indexOf(obj2);
+        
+        if (damagePotential1>damagePotential2){
+            obj2.MAS -= obj1ModDmg;
+            obj1.MAS -= obj2UnmodDmg;
+           log("Masses after obj1 favored collision:"+obj1.MAS+" "+obj2.MAS);
+           sendChat("COLLISION ANOUNCER",String(obj1.obj.get("name"))+" does"+ String(obj1ModDmg)+"damage to "+String(obj2.obj.get("name"))+"and takes "+String(obj2UnmodDmg)+" damage.")
+            
+            obj1.direction = (+obj1.direction + +newDirection1);
+                if (obj1.direction >= 8) {
+                    obj1.direction -= 8
+                };
+                if(obj1.direction < 0){
+                    obj1.direction +=8
+                };
+             obj1.directionArrow.set("rotation", (obj1.direction * 45))
+             
+             obj2.direction = (+obj2.direction + +newDirection2);           
+                if (obj2.direction >= 8) {
+                    obj2.direction -= 8
+                };
+                if(obj2.direction < 0){
+                    obj2.direction +=8
+                };
+            obj2.directionArrow.set("rotation", (obj2.direction * 45))
+            log("directions after collisionobj1,2:"+obj1.direction+" "+obj2.direction);
+            
+            if (collType === "direct"){
+                var potDiff = (damagePotential1 - damagePotential2)
+                var MOMchange = Math.floor(potDiff/2)
+                
+                //    if (MOMchange === 0){
+                //        MOMchange +=1;
+                //    }
+                
+                obj1.MOM -= +MOMchange;
+                obj1.tempMOM -= +MOMchange;
+                obj2.MOM += +MOMchange;
+                obj2.tempMOM += +MOMchange;
+                    
+            }
+            
+            if (obj2.MAS<=0){
+                sendChat("COLLISION ANOUNCER", String(obj2.obj.get("name")+" is destroyed"));
+                var index1 = allRealizedObj.indexOf(obj2)
+                allRealizedObj.splice(index2 - 1, index2)
+                obj2.obj.remove()
+                obj2.arrowObj.remove()
+            }
+            //else{
+            //    obj2.direction = Math.abs(originDirec1-originDirec2)
+            //    Math.floor(((originDirec1*1.5)+(originDirec2*.5))/2)
+            if (obj1.MAS<=0){
+                sendChat("COLLISION ANOUNCER", String(obj1.obj.get("name")+" is destroyed"));
+                allRealizedObj.splice(index1 - 1, index1)
+                obj1.obj.remove()
+                obj1.arrowObj.remove()
+                
+            }
+            
+        }
+        if (damagePotential2>damagePotential1){
+            obj1.MAS -= obj2ModDmg;
+            obj2.MAS -= obj1UnmodDmg;
+            log("Masses after obj2 favored collision:"+obj1.MAS+" "+obj2.MAS);
+            sendChat("COLLISION ANOUNCER", String(obj2.obj.get("name"))+" does"+ String(obj2ModDmg)+"damage to "+String(obj1.obj.get("name"))+"and takes "+String(obj1UnmodDmg)+" damage.")
+            
+             obj1.direction = (+obj1.direction + +newDirection1);
+                if (obj1.direction >= 8) {
+                    obj1.direction -= 8
+                };
+                if(obj1.direction < 0){
+                    obj1.direction +=8
+                };
+             obj1.directionArrow.set("rotation", (obj1.direction * 45))
+             
+             obj2.direction = (+obj2.direction + +newDirection2);;
+                if (obj2.direction >= 8) {
+                    obj2.direction -= 8
+                };
+                if(obj2.direction < 0){
+                    obj2.direction +=8
+                };
+            obj2.directionArrow.set("rotation", (obj2.direction * 45))    
+            log("directions after collisionobj1,2:"+obj1.direction+" "+obj2.direction);
+            
+            if (collType === "direct"){
+                var potDiff = (damagePotential1 - damagePotential2)
+                var MOMchange = Math.floor(potDiff/2)
+                
+                //    if (MOMchange === 0){
+                //        MOMchange +=1;
+                //    }
+                
+                obj1.MOM -= +MOMchange;
+                obj1.tempMOM -= +MOMchange;
+                obj2.MOM += +MOMchange;
+                obj2.tempMOM += +MOMchange;
+                    
+            }
+            
+            if (obj1.MAS<=0){
+                sendChat("COLLISION ANOUNCER", String(obj1.obj.get("name")+" is destroyed"));
+                allRealizedObj.splice(index1 - 1, index1)
+                obj1.obj.remove()
+                obj1.arrowObj.remove()
+            }
+            //else{
+            //    obj2.direction = Math.abs(originDirec2-originDirec1)
+            //    Math.floor(((originDirec1*1.5)+(originDirec2*.5))/2)
+            if (obj2.MAS<=0){
+                sendChat("COLLISION ANOUNCER", String(obj2.obj.get("name")+" is destroyed"));
+                allRealizedObj.splice(index2 - 1, index2)
+                obj2.obj.remove()
+                obj2.arrowObj.remove()
+            }
+        }
+        if (damagePotential1===damagePotential2){
+            obj2.MAS -= obj1UnmodDmg;
+            obj1.MAS -= obj2UnmodDmg;
+            log("Masses after equal collision:"+obj1.MAS+" "+obj2.MAS);
+            sendChat("COLLISION ANOUNCER", String(obj1.obj.get("name"))+" does"+ String(obj1UnmodDmg)+"damage to "+String(obj2.obj.get("name"))+"and takes "+String(obj2UnmodDmg)+" damage.")
+            
+            obj1.direction = (+obj1.direction + +newDirection1);
+                if (obj1.direction >= 8) {
+                    obj1.direction -= 8
+                };
+                if(obj1.direction < 0){
+                    obj1.direction +=8
+                };
+            obj1.directionArrow.set("rotation", (obj1.direction * 45))
+            
+            obj2.direction = (+obj2.direction + +newDirection2);
+                if (obj2.direction >= 8) {
+                    obj2.direction -= 8
+                };
+                if(obj2.direction < 0){
+                    obj2.direction +=8
+                };
+            obj2.directionArrow.set("rotation", (obj2.direction * 45))    
+            
+            log("directions after collisionobj1,2:"+obj1.direction+" "+obj2.direction);
+            
+            if (collType === "direct"){
+                var potDiff = (damagePotential1 - damagePotential2)
+                var MOMchange = Math.floor(potDiff/2)
+                
+                //    if (MOMchange === 0){
+                //        MOMchange +=1;
+                //    }
+                
+                obj1.MOM -= MOMchange;
+                obj1.tempMOM -= MOMchange;
+                obj2.MOM += MOMchange;
+                obj2.tempMOM +=MOMchange;
+                    
+            }
+            
+            if (obj2.MAS<=0){
+                sendChat("COLLISION ANOUNCER", String(obj2.obj.get("name")+" is destroyed"));
+                allRealizedObj.splice(index2 - 1, index2);
+                obj2.obj.remove()
+                obj2.arrowObj.remove()
+            };
+            //else{
+            //    obj2.direction = Math.abs(originDirec1-originDirec2)
+            //    Math.floor(((originDirec1*1.5)+(originDirec2*.5))/2)
+            if (obj1.MAS<=0){
+                sendChat("COLLISION ANOUNCER", String(obj1.obj.get("name")+" is destroyed"));
+                allRealizedObj.splice(index1 - 1, index1)
+                obj1.obj.remove()
+                obj1.arrowObj.remove()
+                
+            }  
+        }
+    }
+}
