@@ -1,0 +1,64 @@
+on("change:graphic", function (obj) {
+    'use strict';
+    
+    if (obj.get("controlledby")!== ""){
+        var plyrId = obj.get("controlledby");
+        var plyrNmbr = state.playerIndex.indexOf(plyrId);
+        //log("plyrNmbr at graphic change"+plyrNmbr);
+        //log("obj.id at graphic change"+obj.id)
+        //log("state.playerCharInfo[plyrNmbr].tokenId at graphic change"+state.playerCharInfo[plyrNmbr].tokenId)
+    
+    if ((gameOn[0].onSwitch !== -1) && (state.playerCharInfo[plyrNmbr].tokenId===obj.id)){
+        state.playerCharInfo[plyrNmbr].charLeftPos = obj.get("left");
+        state.playerCharInfo[plyrNmbr].charTopPos = obj.get("top");
+        placeAura(plyrNmbr);
+    };
+    
+    if ((gameOn[0].onSwitch !== -1) && (playerSoul[plyrNmbr][0].elemId=== obj.id)){
+        placeAura(plyrNmbr)
+    };
+        
+    if ((gameOn[0].onSwitch !== -1)&&(obj.controlledby!=="")&&((obj.get("imgsrc")===placer[5].type)||(obj.get("imgsrc")===placer[4].type)||(obj.get("imgsrc")===placer[3].type))){
+//        var plyrId = obj.get("controlledby");
+//        var plyrNmbr = state.plyrNmbr.indexOf(plyrId);
+//        plyrNmbr+=1;
+        //log ("objID in diff display" + obj.id)  
+        
+        for (var i=1;i<9;i++){
+            var barValue = ("bar"+String((i%3)+ 1)+"_value") 
+            if (obj.id===(playerMaker[plyrNmbr][(Math.floor(i/3)+ 3)]._id)){
+                plyrMakerStatLvl[plyrNmbr][i].statLvl = obj.get(barValue)
+                playerMaker[plyrNmbr][(Math.floor(i/3)+ 3)].leftPosTemp = obj.get("left");
+                playerMaker[plyrNmbr][(Math.floor(i/3)+ 3)].topPosTemp = obj.get("top");
+                    
+                    //log("playermaker plyrNmbr on change"+plyrNmbr)
+                    //log("i,i%3,mathfloori/3+3"+" "+i+" "+((i%3)+ 1)+" "+(Math.floor(i/3)+ 3))
+                    //log("plyrMaker left on change"+playerMaker[plyrNmbr][(Math.floor(i/3)+ 3)].leftPosTemp)
+                    //log("plyrMaker top on change"+playerMaker[plyrNmbr][(Math.floor(i/3)+ 3)].topPosTemp)
+            }
+        };
+        
+        var placerRelativeToCharacterTop = ((Math.abs(+playerMaker[plyrNmbr][3].topPosTemp - +state.playerCharInfo[plyrNmbr].charTopPos))/70);
+        var placerRelativeToCharacterLeft = ((Math.abs(+playerMaker[plyrNmbr][3].leftPosTemp - +state.playerCharInfo[plyrNmbr].charLeftPos))/70);
+        if (((placerRelativeToCharacterTop - placerRelativeToCharacterLeft)!==0)&&((playerMaker[plyrNmbr][3].topPosTemp!==(35+playerMaker[plyrNmbr][0].topPos))&&(playerMaker[plyrNmbr][3].leftPosTemp!==(playerMaker[plyrNmbr][0].leftPos - 35)))){
+            plyrMakerStatLvl[plyrNmbr][0].statLvl  = (placerRelativeToCharacterTop + placerRelativeToCharacterLeft)
+        }
+        else if ((playerMaker[plyrNmbr][3].topPosTemp!==(35+playerMaker[plyrNmbr][1].topPos))&&(playerMaker[plyrNmbr][3].leftPosTemp!==(playerMaker[plyrNmbr][1].leftPos - 35))){
+            plyrMakerStatLvl[plyrNmbr][0].statLvl = ((placerRelativeToCharacterTop + placerRelativeToCharacterLeft)-Math.floor((placerRelativeToCharacterTop + placerRelativeToCharacterLeft) / 3));
+        };   
+        
+        lvlDisplay(plyrNmbr);
+            
+        for (var x=0;x<3;x++){
+            if (playerMaker[plyrNmbr][x + 3]._id === obj.id) {
+                log("elemBonus fires with"+plyrNmbr+x);
+                elemBonus(plyrNmbr,x);
+            };
+        };
+            
+        diffDisplay(plyrNmbr);
+        //};
+    
+        };
+    };
+});
