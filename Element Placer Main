@@ -1,0 +1,395 @@
+  var placer = [
+    {"type":"https://s3.amazonaws.com/files.d20.io/images/14665448/gSZC0AbWCS8Fj1hmpexGkg/thumb.png?1450807418","name":"energyMaker"},
+    {"type":"https://s3.amazonaws.com/files.d20.io/images/14665318/igta0p52x-g1A5-04-9_1Q/thumb.png?1450806958","name":"stableMaker"},
+    {"type":"https://s3.amazonaws.com/files.d20.io/images/14665578/sEuKYReaFo5YkQgBqO-9LA/thumb.png?1450807639","name":"essenceMaker"},
+    {"type":"https://s3.amazonaws.com/files.d20.io/images/14669240/cgcFoiFbjqi2YaJ7U4tJJQ/thumb.png?1450818432","name":"energyPlacer"},
+    {"type":"https://s3.amazonaws.com/files.d20.io/images/14669263/56jA43E4_USQwCOQTecnaA/thumb.png?1450818488","name":"stablePlacer"},
+    {"type":"https://s3.amazonaws.com/files.d20.io/images/14669260/cAW3OFXJuguNCBMrpjpNGQ/thumb.png?1450818480","name":"essencePlacer"}
+    ];
+
+
+var placerState = [
+    {"name":"energyMaker","_id":0,"leftPos":0,"leftPosTemp":0,"topPos":0,"topPosTemp":0,"element":-1},
+    {"name":"essenceMaker","_id":0,"leftPos":0,"leftPosTemp":0,"topPos":0,"topPosTemp":0,"element":-1},
+    {"name":"stableMaker","_id":0,"leftPos":0,"leftPosTemp":0,"topPos":0,"topPosTemp":0,"element":-1},
+    {"name":"enPlacer","_id":0,"leftPos":0,"leftPosTemp":0,"topPos":0,"topPosTemp":0,"element":0},
+    {"name":"stbPlacer","_id":0,"leftPos":0,"leftPosTemp":0,"topPos":0,"topPosTemp":0,"element":0},
+    {"name":"essPlacer","_id":0,"leftPos":0,"leftPosTemp":0,"topPos":0,"topPosTemp":0,"element":0},
+    ];
+    
+var playerMaker = [placerState,placerState,placerState,placerState,placerState];    
+    
+var makerStatLvl = [
+    {"statLvl":0,"name":"projection","textId":0},
+    {"statLvl":0,"name":"intensityLvl","textId":0,"direction":0,"arrowObj":0},
+    {"statLvl":0,"name":"connectionLvl","textId":0},
+    {"statLvl":0,"name":"momentumLvl","textId":0,"direction":0,"arrowObj":0},
+    {"statLvl":0,"name":"massLvl","textId":0},
+    {"statLvl":0,"name":"stabilityLvl","textId":0},
+    {"statLvl":0,"name":"perceptionLvl","textId":0},
+    {"statLvl":0,"name":"controlLvl","textId":0},
+    {"statLvl":0,"name":"creativity","textId":0}
+    ];
+    
+var plyrMakerStatLvl = [makerStatLvl,makerStatLvl,makerStatLvl,makerStatLvl,makerStatLvl,makerStatLvl]
+
+var stableDirectionArrow = "https://s3.amazonaws.com/files.d20.io/images/15050334/G4Oz9nc2txZffrLCAtW4Ow/thumb.png?1452203481"
+    
+var gameOn = [
+    {"onSwitch":-1}
+    ];
+
+
+var difficulty = [
+    {"name":"Energy Difficulty","diffLvl":0,"_id":0},
+    {"name":"Stable Difficulty","diffLvl":0,"_id":0},
+    {"name":"Essence Difficulty","diffLvl":0,"_id":0},
+    {"name":"Total Difficulty","diffLvl":0,"_id":0}
+    ];
+    
+var plyrDifficulty = [difficulty,difficulty,difficulty,difficulty,difficulty]    
+
+var bonusLvl = [
+    {"bnsLvl":0,"name":"PRObns","_id":0,"element":-1},
+    {"bnsLvl":0,"name":"INTbns","_id":0,"element":-1},
+    {"bnsLvl":0,"name":"CONbns","_id":0,"element":-1},
+    {"bnsLvl":0,"name":"MOMbns","_id":0,"element":-1},
+    {"bnsLvl":0,"name":"MASbns","_id":0,"element":-1},
+    {"bnsLvl":0,"name":"STAbns","_id":0,"element":-1},
+    {"bnsLvl":0,"name":"PERbns","_id":0,"element":-1},
+    {"bnsLvl":0,"name":"COTbns","_id":0,"element":-1},
+    {"bnsLvl":0,"name":"CREbns","_id":0,"element":-1}
+    ]
+
+var plyrBonusLvl = [bonusLvl,bonusLvl,bonusLvl,bonusLvl,bonusLvl] 
+
+state.makerElem = [];
+
+var makerElem = [
+    {"name":"Energy Element","_id":0,"element":0},
+    {"name":"Stable Element","_id":0,"element":0},
+    {"name":"Essence Element","_id":0,"element":0}
+    ];
+
+state.makerElem = [makerElem,makerElem,makerElem,makerElem,makerElem,makerElem];
+    
+    var placerCreate = function(topPos,leftPos,plyrCntrl,plyrNmbr) {
+        'use strict';
+        
+        topPos = (35+playerSoul[plyrNmbr][0].topPos)*(Math.floor(plyrNmbr/3) + 1);
+        leftPos = (105+playerSoul[plyrNmbr][6].leftPos);
+     
+        playerMaker[plyrNmbr] = placerState
+        
+        playerMaker[plyrNmbr][0]._id = createObj("graphic", {
+                name: placer[0].name,
+                imgsrc: placer[0].type,
+                left:(leftPos),
+                top:(topPos),
+                width:140,
+                height:140,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"map",
+                controlledby:plyrCntrl
+        });     
+        
+        playerMaker[plyrNmbr][0].leftPos = leftPos;
+        playerMaker[plyrNmbr][0].topPos = topPos;
+        
+        playerMaker[plyrNmbr][1]._id = createObj("graphic", {
+                name: placer[1].name,
+                imgsrc: placer[1].type,
+                left:140+(leftPos),
+                top:(topPos),
+                width:140,
+                height:140,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"map",
+                controlledby:plyrCntrl
+        });   
+        
+        playerMaker[plyrNmbr][1].leftPos = 140+(leftPos);
+        playerMaker[plyrNmbr][1].topPos = (topPos);
+        
+        playerMaker[plyrNmbr][2]._id = createObj("graphic", {
+                name: placer[2].name,
+                imgsrc: placer[2].type,
+                left:280+(leftPos),
+                top:(topPos),
+                width:140,
+                height:140,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"map",
+                controlledby: plyrCntrl
+        });
+        
+        playerMaker[plyrNmbr][2].leftPos = 280+(leftPos);
+        playerMaker[plyrNmbr][2].topPos = (topPos);
+
+       var energyPlacer = createObj("graphic", {
+                name: placer[3].name,
+                imgsrc: placer[3].type,
+                left:playerMaker[plyrNmbr][0].leftPos - 35,
+                top:35+playerMaker[plyrNmbr][0].topPos,
+                width:70,
+                height:70,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"objects",
+                bar1_value: plyrMakerStatLvl[plyrNmbr][0].statLvl,
+                bar2_value: plyrMakerStatLvl[plyrNmbr][1].statLvl,
+                bar3_value: plyrMakerStatLvl[plyrNmbr][2].statLvl,
+                controlledby:plyrCntrl
+        });
+        
+        playerMaker[plyrNmbr][3]._id = energyPlacer.id
+        playerMaker[plyrNmbr][3].leftPos = playerMaker[plyrNmbr][0].leftPos - 35;
+        playerMaker[plyrNmbr][3].topPos = 35+playerMaker[plyrNmbr][0].topPos;
+        playerMaker[plyrNmbr][3].leftPosTemp = playerMaker[plyrNmbr][0].leftPos - 35;
+        playerMaker[plyrNmbr][3].topPosTemp = 35+playerMaker[plyrNmbr][0].topPos;
+        //TEST
+        log("energy placer ID"+String(playerMaker[plyrNmbr][3]._id))
+        
+        var stablePlacer = createObj("graphic", {
+                name: placer[4].name,
+                imgsrc: placer[4].type,
+                left:playerMaker[plyrNmbr][1].leftPos - 35,
+                top:35+playerMaker[plyrNmbr][1].topPos,
+                width:70,
+                height:70,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"objects",
+                bar1_value: plyrMakerStatLvl[plyrNmbr][3].statLvl,
+                bar2_value: plyrMakerStatLvl[plyrNmbr][4].statLvl,
+                bar3_value: plyrMakerStatLvl[plyrNmbr][5].statLvl,
+                controlledby:plyrCntrl
+        
+        });
+        playerMaker[plyrNmbr][4]._id = stablePlacer.id
+        playerMaker[plyrNmbr][4].leftPos = playerMaker[plyrNmbr][1].leftPos - 35;
+        playerMaker[plyrNmbr][4].topPos = 35+playerMaker[plyrNmbr][1].topPos;
+        playerMaker[plyrNmbr][4].leftPosTemp = playerMaker[plyrNmbr][1].leftPos - 35;
+        playerMaker[plyrNmbr][4].topPosTemp = 35+playerMaker[plyrNmbr][1].topPos;
+        //TEST
+        log("stable placer ID"+String(playerMaker[plyrNmbr][4]._id));
+        
+        var essencePlacer = createObj("graphic", {
+                name: placer[5].name,
+                imgsrc: placer[5].type,
+                left:playerMaker[plyrNmbr][2].leftPos - 35,
+                top:35+playerMaker[plyrNmbr][2].topPos,
+                width:70,
+                height:70,
+                pageid:Campaign().get("playerpageid"), 
+                layer:"objects",
+                bar1_value: plyrMakerStatLvl[plyrNmbr][6].statLvl,
+                bar2_value: plyrMakerStatLvl[plyrNmbr][7].statLvl,
+                bar3_value: plyrMakerStatLvl[plyrNmbr][8].statLvl,
+                controlledby:plyrCntrl
+        });
+        
+        playerMaker[plyrNmbr][5]._id = essencePlacer.id
+        playerMaker[plyrNmbr][5].leftPos = playerMaker[plyrNmbr][2].leftPos- 35;
+        playerMaker[plyrNmbr][5].topPos = 35+playerMaker[plyrNmbr][2].topPos;
+        playerMaker[plyrNmbr][5].leftPosTemp = playerMaker[plyrNmbr][2].leftPos- 35;
+        playerMaker[plyrNmbr][5].topPosTemp = 35+playerMaker[plyrNmbr][2].topPos;
+        //TEST
+        log("essence placer ID"+String(playerMaker[plyrNmbr][5]._id));
+};
+
+var lvlDisplay = function(plyrNmbr) {
+    
+    for (var i = 0; i<9; i++){
+        if (plyrMakerStatLvl[plyrNmbr][i].textId !== 0){ 
+        (plyrMakerStatLvl[plyrNmbr][i].textId).remove();
+        };    
+        
+    plyrMakerStatLvl[plyrNmbr][i].textId=createObj("text", {
+        name: plyrMakerStatLvl[plyrNmbr][i].name,
+        text: String(plyrMakerStatLvl[plyrNmbr][i].statLvl),
+        left:(25 + playerMaker[plyrNmbr][Math.floor(i/3)].leftPos),
+        top:((15*(i%3)+playerMaker[plyrNmbr][Math.floor(i/3)].topPos)- 45),
+        font_size:16,
+        pageid:Campaign().get("playerpageid"), 
+        layer:"map",
+        });
+    };
+};
+
+var diffDisplay = function (plyrNmbr) {
+    
+    //plyrDifficulty[plyrNmbr][0].diffLvl = (+plyrMakerStatLvl[plyrNmbr][0].statLvl - +plyrBonusLvl[plyrNmbr][0].bnsLvl) + (+plyrMakerStatLvl[plyrNmbr][1].statLvl - +plyrBonusLvl[plyrNmbr][1].bnsLvl)+(+plyrMakerStatLvl[plyrNmbr][2].statLvl - +plyrBonusLvl[plyrNmbr][2].bnsLvl);
+    //plyrDifficulty[plyrNmbr][1].diffLvl = (+plyrMakerStatLvl[plyrNmbr][3].statLvl  - +plyrBonusLvl[plyrNmbr][3].bnsLvl) + (+plyrMakerStatLvl[plyrNmbr][4].statLvl  - +plyrBonusLvl[plyrNmbr][4].bnsLvl) + (+plyrMakerStatLvl[plyrNmbr][5].statLvl - +plyrBonusLvl[plyrNmbr][5].bnsLvl);
+    //plyrDifficulty[plyrNmbr][2].diffLvl = (+plyrMakerStatLvl[plyrNmbr][6].statLvl - +plyrBonusLvl[plyrNmbr][6].bnsLvl) + (+plyrMakerStatLvl[plyrNmbr][7].statLvl - +plyrBonusLvl[plyrNmbr][7].bnsLvl) + (+plyrMakerStatLvl[plyrNmbr][8].statLvl - +plyrBonusLvl[plyrNmbr][8].bnsLvl);
+    plyrDifficulty[plyrNmbr][0].diffLvl = 0;
+    plyrDifficulty[plyrNmbr][1].diffLvl = 0;
+    plyrDifficulty[plyrNmbr][2].diffLvl = 0;
+    
+    for (var x=0; x<9; x++){
+        if (x>=0 && x<3){
+            plyrDifficulty[plyrNmbr][Math.floor(x/3)].diffLvl += (+plyrMakerStatLvl[plyrNmbr][x].statLvl - +plyrBonusLvl[plyrNmbr][x].bnsLvl);
+        }
+        else if (x>=3 && x<6){
+            plyrDifficulty[plyrNmbr][Math.floor(x/3)].diffLvl += (+plyrMakerStatLvl[plyrNmbr][x].statLvl - +plyrBonusLvl[plyrNmbr][x].bnsLvl);
+        }       
+        else if (x>=6 && x<9){
+            plyrDifficulty[plyrNmbr][Math.floor(x/3)].diffLvl += (+plyrMakerStatLvl[plyrNmbr][x].statLvl - +plyrBonusLvl[plyrNmbr][x].bnsLvl);
+        };
+    };
+    
+    for (var i = 0; i<4; i++){
+        if (plyrDifficulty[plyrNmbr][i]._id !== 0){
+            (plyrDifficulty[plyrNmbr][i]._id.remove())
+        };
+        if (i<3){
+            var leftPos = (playerMaker[plyrNmbr][i].leftPos);
+            var topPos = (playerMaker[plyrNmbr][i].topPos+ 125);
+        }
+        else {
+            leftPos = (140+playerMaker[plyrNmbr][2].leftPos)
+            topPos = (playerMaker[plyrNmbr][2].topPos+ 125)
+        };
+    
+    plyrDifficulty[plyrNmbr][i]._id=createObj("text", {
+        name: plyrDifficulty[plyrNmbr][i].name,
+        text: String((plyrDifficulty[plyrNmbr][i].name)+" "+(plyrDifficulty[plyrNmbr][i].diffLvl)),
+        left:leftPos,
+        top:topPos,
+        font_size:16,
+        pageid:Campaign().get("playerpageid"), 
+        layer:"map",
+        });
+    };    
+};
+
+var elemDisplay = function(plyrNmbr){ 
+    //log("playerNmbr in Elem display"+plyrNmbr)
+    var counter = 0;
+    
+    for(i=0;i<3;i++){
+        if (state.makerElem[plyrNmbr][i]._id!==0){
+            state.makerElem[plyrNmbr][i]._id.remove()
+        };
+        for(var x=0; x<3; x++){
+            if ((plyrBonusLvl[plyrNmbr][counter].element !== -1)&&(plyrBonusLvl[plyrNmbr][counter].element !== state.makerElem[plyrNmbr][i].element)) {
+                    plyrBonusLvl[plyrNmbr][counter]._id.remove();
+                    plyrBonusLvl[plyrNmbr][counter].element = -1;
+            };
+            counter +=1
+        };    
+      //if (state.makerElem[plyrNmbr][i].element!==-1){
+            
+           var leftPos = (playerMaker[plyrNmbr][i].leftPos);
+           var topPos = (playerMaker[plyrNmbr][i].topPos+ 90)
+            
+        var makerElemNew=createObj("text", {
+            name: state.makerElem[plyrNmbr][i].element,
+            text: String(element[state.makerElem[plyrNmbr][i].element].name),
+            left:leftPos,
+            top:topPos,
+            font_size:16,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"map",
+            });
+            state.makerElem[plyrNmbr][i]._id = makerElemNew
+    };
+        //};
+};
+
+var elemBonus = function (plyrNmbr,slotNmbr){
+    //log("elemBonusParams"+plyrNmbr+slotNmbr);
+    for(i=0;i<9;i++){
+        //log("playerSoulElements"+playerSoul[plyrNmbr][i].element);
+        //log("player State.MakerElem" + state.makerElem[plyrNmbr][slotNmbr].element);
+        //log("statecharAttributes" + state.charAttributes[plyrNmbr][i].name);
+        if ((i>=(+slotNmbr*3))&&(i<(3*(slotNmbr + 1)))){
+            if (+playerSoul[plyrNmbr][i].element=== +state.makerElem[plyrNmbr][slotNmbr].element){
+                plyrBonusLvl[plyrNmbr][i].bnsLvl = getAttrByName((state.playerCharInfo[plyrNmbr].charId),(state.charAttributes[plyrNmbr][i].name));
+                plyrBonusLvl[plyrNmbr][i].element = playerSoul[plyrNmbr][i].element;
+                log("playerSoul[plyrNmbr][i].element at elemBonus"+playerSoul[plyrNmbr][i].element);
+                //log("player"+plyrNmbr+"forSlot"+i+"bonusLevel"+plyrBonusLvl[plyrNmbr][i].bnsLvl)
+            
+                if (plyrBonusLvl[plyrNmbr][i]._id != 0) {
+                    plyrBonusLvl[plyrNmbr][i]._id.remove();
+                };
+            
+                plyrBonusLvl[plyrNmbr][i]._id=createObj("text", {
+                    name: plyrBonusLvl[plyrNmbr][i].name,
+                    text: String((plyrBonusLvl[plyrNmbr][i].name)+" "+String(playerSoul[plyrNmbr][i].element)+"= -"+String(plyrBonusLvl[plyrNmbr][i].bnsLvl)),
+                    left: (130+(playerMaker[plyrNmbr][2].leftPos)+((i%3)*105)),
+                    top:((playerMaker[plyrNmbr][2].topPos)+((+slotNmbr)*30))- 60,
+                    font_size:16,
+                    pageid:Campaign().get("playerpageid"), 
+                    layer:"map",
+                });
+          
+                diffDisplay(plyrNmbr);
+            }
+            else{
+                plyrBonusLvl[plyrNmbr][i].bnsLvl = 0;
+                
+                if (plyrBonusLvl[plyrNmbr][i]._id != 0) {
+                    plyrBonusLvl[plyrNmbr][i]._id.remove();
+                };
+            
+                plyrBonusLvl[plyrNmbr][i]._id=createObj("text", {
+                    name: plyrBonusLvl[plyrNmbr][i].name,
+                    text: String((plyrBonusLvl[plyrNmbr][i].name)+" "+String(playerSoul[plyrNmbr][i].element)+"= -"+String(plyrBonusLvl[plyrNmbr][i].bnsLvl)),
+                    left: (130+(playerMaker[plyrNmbr][2].leftPos)+((i%3)*105)),
+                    top:((playerMaker[plyrNmbr][2].topPos)+((+slotNmbr)*30))- 60,
+                    font_size:16,
+                    pageid:Campaign().get("playerpageid"), 
+                    layer:"map",
+                });
+          
+                diffDisplay(plyrNmbr);
+            };
+        };    
+    };
+};
+
+
+var drawStableDirection = function(plyrNmbr,direction,makerSlot){
+    plyrCntrl = state.playerIndex[plyrNmbr]
+    log("drawstable fires with plyrNmbr, direction, makerSlot"+plyrNmbr+" "+direction+" "+makerSlot)
+    var statSlot;
+    if(makerSlot === 0){statSlot = 1}
+    else if(makerSlot === 1){statSlot = 3};
+    log("statSlot="+statSlot)
+    
+    if (plyrMakerStatLvl[plyrNmbr][statSlot].arrowObj!==0){
+        log("plyrMakerStatLvl[plyrNmbr][statSlot].arrowObj is removed")
+        plyrMakerStatLvl[plyrNmbr][statSlot].arrowObj.remove();
+    }
+    plyrMakerStatLvl[plyrNmbr][statSlot].direction = direction;
+   
+   var arrow = createObj("graphic", {
+        name: "makerDirectionArrow"+String(makerSlot),
+        imgsrc: stableDirectionArrow,
+        left:playerMaker[plyrNmbr][makerSlot].leftPos + 35,
+        top:playerMaker[plyrNmbr][makerSlot].topPos + 35,
+        width:70,
+        height:70,
+        pageid:Campaign().get("playerpageid"), 
+        layer:"map",
+        rotation: (+plyrMakerStatLvl[plyrNmbr][statSlot].direction * 45),
+        controlledby:plyrCntrl
+        
+    })
+     plyrMakerStatLvl[plyrNmbr][statSlot].arrowObj = arrow;
+     log("this arrowObj created at create stable with plyrNmbr+statSlot:"+plyrMakerStatLvl[plyrNmbr][statSlot].arrowObj.get("name")+" "+plyrNmbr+" "+statSlot)
+    
+}
+
+on ("chat:message", function(msg) {
+    if (msg.type == "api" && msg.content.indexOf("!direction") !== -1) {
+        var makerSlot = msg.content.charAt(10);
+        var direction = msg.content.charAt(11);
+        if (((direction !== "")&&((+direction>=0)&&(+direction<=7)))&&((makerSlot!=="")&&(+makerSlot>=0)&&(+makerSlot<=1))){
+            var plyrNmbr = state.playerIndex.indexOf(msg.playerid)  
+                    //log("placeTemp"+plyrNmbr+makerType);
+                    log("this arrowObj exists at !direction with plyrNmbr+1 for statslot:"+plyrMakerStatLvl[plyrNmbr][1].arrowObj.get("name")+" "+plyrNmbr)
+                    drawStableDirection(plyrNmbr,direction,+makerSlot);
+                      
+        }    
+    }   
+}); 
