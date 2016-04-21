@@ -218,3 +218,69 @@ var choiceInsert = function (elem, slot, plyrNmbr) {
         
         log("transElem left Pos at choice"+transElem[plyrNmbr].leftPos)
 };
+
+
+//This function fills the puzzle box with random elements
+var elemStart = function(slotNumber, plyrNmbr) {
+    
+    playerSoul[plyrNmbr][slotNumber].element=Math.floor(Math.random() * 6);        
+    playerSoul[plyrNmbr][slotNumber].number=slotNumber;
+        
+    
+    var elemType = playerSoul[plyrNmbr][slotNumber].element;
+    playerSoul[plyrNmbr][slotNumber].name=element[elemType].name;
+        
+        elemNew = createObj("graphic", {
+            name: element[elemType].name,
+            imgsrc: element[elemType].type ,
+            left:playerSoul[plyrNmbr][slotNumber].leftPos,
+            top:playerSoul[plyrNmbr][slotNumber].topPos,
+            width:70,
+            height:70,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"objects",
+            controlledby: state.playerIndex[plyrNmbr]
+            
+        });
+         playerSoul[plyrNmbr][slotNumber].elemObj = elemNew
+         playerSoul[plyrNmbr][slotNumber].elemId = elemNew.id; 
+         log("plyrNmbr at elemStart"+plyrNmbr)
+         
+         
+}; 
+
+//places aura around character based on element in slot
+
+var placeAura = function(plyrNmbr){
+    if (playerSoul[plyrNmbr][0].element !== 6){
+    for(var y=0; y<9; y++){    
+        if (plyrCharAura[plyrNmbr][y].auraObj !== 0){
+            plyrCharAura[plyrNmbr][y].auraObj.remove()
+        };
+        
+        var elemType = playerSoul[plyrNmbr][0].element;
+        log ("elemtype at change graphic"+elemType)
+        var leftPosAura = ((state.playerCharInfo[plyrNmbr].charLeftPos)+(70*(Math.floor(y/3)- 1)));
+        var topPosAura = ((state.playerCharInfo[plyrNmbr].charTopPos)+(70*((y % 3) - 1)));
+                
+        var playerAura = createObj("graphic", {
+        name: tableElementTypes[0][elemType].name,
+        imgsrc: tableElementTypes[0][elemType].imgsrc,
+        left:leftPosAura,
+        top:topPosAura,
+        width:70,
+        height:70,
+        pageid:Campaign().get("playerpageid"), 
+        layer:"map",
+        controlledby: state.playerIndex[plyrNmbr]
+                    
+        });
+        plyrCharAura[plyrNmbr][y].leftPos = leftPosAura;
+        plyrCharAura[plyrNmbr][y].topPos = topPosAura;
+        plyrCharAura[plyrNmbr][y].element = elemType;
+        plyrCharAura[plyrNmbr][y].auraObj = playerAura;                    
+    }
+    }
+}
+
+    
