@@ -1,0 +1,141 @@
+var puzzle = function (slotNumber, plyrCntrl, plyrNmbr) { 
+            'use strict';
+               
+                // Math.floor() drops the remainder, so this will be:
+                // 0 0 0 1 1 1 2 2 2 ....
+                var leftPos = (35+(70*(Math.floor(slotNumber/3))))+((plyrNmbr)*850);
+                
+                // the Modulus operator (%) is the remainder after division:
+                // 0 1 2 0 1 2 0 1 2 ....
+                var topPos = (35+(70*(slotNumber % 3)))*(Math.floor(plyrNmbr/3) + 1);
+                
+                
+                playerSoul[plyrNmbr][slotNumber].leftPos= leftPos;
+                playerSoul[plyrNmbr][slotNumber].topPos= topPos;
+                
+            createObj("graphic", {
+                name: soul[slotNumber].name,
+                imgsrc: soul[slotNumber].slot,
+                left:leftPos,
+                top:topPos,
+                width:70,
+                height:70,
+                pageid:Campaign().get("playerpageid"),
+                layer:"map",
+                controlledby: plyrCntrl
+                    
+            });
+        
+};
+
+
+
+
+
+var moveElem = function (slotNumber, plyrNmbr) {
+    //checks if an element is in same slot as a null place holder then replaces it 
+    if (playerSoul[plyrNmbr][slotNumber].element===6){ 
+        var swapper = playerSoul[plyrNmbr][slotNumber].elemId;
+        playerSoul[plyrNmbr][slotNumber].elemId = transElem[plyrNmbr].elemId;
+        transElem[plyrNmbr].elemId = swapper
+        
+        var swapper2 =  playerSoul[plyrNmbr][slotNumber].elemObj
+        playerSoul[plyrNmbr][slotNumber].elemObj = transElem[plyrNmbr].elemObj
+        transElem[plyrNmbr].elemObj = swapper2
+        
+        playerSoul[plyrNmbr][slotNumber].element = transElem[plyrNmbr].element;
+        transElem[plyrNmbr].end = -1;
+        
+        //CHECKER
+        log("MOVEELEM CANCELLED replace X"+" "+playerSoul[plyrNmbr][slotNumber].element)
+    }
+    //checks if elements in same slot are opposites then destroys them and adds a "Null" place holder
+    else if ((+transElem[plyrNmbr].element !== +playerSoul[plyrNmbr][slotNumber].element) && ((transElem[plyrNmbr].element % 3) === (playerSoul[plyrNmbr][slotNumber].element % 3))) {
+        (playerSoul[plyrNmbr][slotNumber].elemObj).remove();
+        transElem[plyrNmbr].end = -1;
+          
+          playerSoul[plyrNmbr][slotNumber].elemObj = createObj("graphic", {
+            name: element[6].name,
+            imgsrc: element[6].type,
+            left:playerSoul[plyrNmbr][slotNumber].leftPos,
+            top:playerSoul[plyrNmbr][slotNumber].topPos,
+            width:70,
+            height:70,
+            pageid:Campaign().get("playerpageid"), 
+            layer:"objects",
+        });   
+        playerSoul[plyrNmbr][slotNumber].number = slotNumber
+        playerSoul[plyrNmbr][slotNumber].element = 6
+        playerSoul[plyrNmbr][slotNumber].direction = 0
+        
+        //CHECKER
+        log("ELEMENTS CANCELLED, slot number"+" "+playerSoul[plyrNmbr][slotNumber].number)
+        
+    }
+    //destroys a moving element if its next move would take it out of the puzzlebox
+    else if (((transElem[plyrNmbr].slot===2 || transElem[plyrNmbr].slot===5 || transElem[plyrNmbr].slot===8) && (transElem[plyrNmbr].direction === 1)) 
+    || ((transElem[plyrNmbr].slot===6 || transElem[plyrNmbr].slot===7 || transElem[plyrNmbr].slot===8) && (transElem[plyrNmbr].direction === 3))
+    || ((transElem[plyrNmbr].slot===0 || transElem[plyrNmbr].slot===3 || transElem[plyrNmbr].slot===6) && (transElem[plyrNmbr].direction === -1))
+    || ((transElem[plyrNmbr].slot===0 || transElem[plyrNmbr].slot===1 || transElem[plyrNmbr].slot===2) && (transElem[plyrNmbr].direction === -3))){
+        
+        transElem[plyrNmbr].end = -1;
+        
+        var swap = playerSoul[plyrNmbr][slotNumber].elemId;
+        playerSoul[plyrNmbr][slotNumber].elemId = transElem[plyrNmbr].elemId;
+        transElem[plyrNmbr].elemId = swap;
+        
+        var swapB = playerSoul[plyrNmbr][slotNumber].elemObj;
+        playerSoul[plyrNmbr][slotNumber].elemObj = transElem[plyrNmbr].elemObj;
+        transElem[plyrNmbr].elemObj = swapB;
+        
+        var swap2 = playerSoul[plyrNmbr][slotNumber].element;
+        playerSoul[plyrNmbr][slotNumber].element = transElem[plyrNmbr].element;
+        transElem[plyrNmbr].element = swap2;
+        
+        //Checker
+        log("Elem that should be in end slot"+playerSoul[plyrNmbr][slotNumber].element);
+        
+    }
+    //This swaps the attributes of the slot element and the transition element then moves the transition element out of the slot
+    else {
+        var swap3 = playerSoul[plyrNmbr][slotNumber].elemId;
+        playerSoul[plyrNmbr][slotNumber].elemId = transElem[plyrNmbr].elemId;
+        transElem[plyrNmbr].elemId = swap3;
+        
+        var swap3B = playerSoul[plyrNmbr][slotNumber].elemObj;
+        playerSoul[plyrNmbr][slotNumber].elemObj = transElem[plyrNmbr].elemObj;
+        transElem[plyrNmbr].elemObj = swap3B;
+        //log("this variable swaps ids" + swap3)
+        
+        var swap4 = playerSoul[plyrNmbr][slotNumber].element;
+        playerSoul[plyrNmbr][slotNumber].element = transElem[plyrNmbr].element;
+        transElem[plyrNmbr].element = swap4;
+            
+            if (transElem[plyrNmbr].slot === 0) {
+                placeAura(plyrNmbr)
+            };
+            
+        var num = transElem[plyrNmbr].slot
+        var dir = transElem[plyrNmbr].direction
+        var slotMove = (num + dir);
+        transElem[plyrNmbr].leftPos = playerSoul[plyrNmbr][slotMove].leftPos;
+        transElem[plyrNmbr].topPos = playerSoul[plyrNmbr][slotMove].topPos;
+        transElem[plyrNmbr].slot = slotMove;
+        
+        (transElem[plyrNmbr].elemObj).set ("left", transElem[plyrNmbr].leftPos);
+        (transElem[plyrNmbr].elemObj).set ("top", transElem[plyrNmbr].topPos);
+        
+        //Checker
+        log("transElem start slot" + num);
+        log("transElem should move to these top,left" + (transElem[plyrNmbr].topPos)+" "+(transElem[plyrNmbr].leftPos))
+        log("transElem end slot"+slotMove)   
+    };   
+            if (transElem[plyrNmbr].end !== -1){
+                moveElem (transElem[plyrNmbr].slot, plyrNmbr)
+            }
+           else {
+                transElem[plyrNmbr].elemObj.remove()
+        
+            };
+
+};
