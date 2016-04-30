@@ -1,0 +1,113 @@
+on ("chat:message", function(msg) {
+    if (msg.type == "api" && msg.content.indexOf("!speaksTo") !== -1) {
+        log("speaksto fires");
+        var characterIndex = findObjs({                              
+            //_pageid: Campaign().get("playerpageid"),                              
+            _type: "character",
+        });
+        
+        if (state.charSpeaking.length!==0){
+            for(i = 0;i<state.charSpeaking.length;i++){
+                if(state.charSpeaking[i] !== 0){
+                    state.charSpeaking[i].remove();
+                    state.charSpeaking[i] = 0;
+                    state.charSpeakingNumber -=1;
+                }
+            }
+        }
+        
+        log("characterIndex length "+characterIndex.length)
+        var speaker1 = 0
+        var speaker2 = 0
+        
+        for (i = 0; i<characterIndex.length; i++){
+            log("characterIndex names in loop: "+characterIndex[i].get("name"))
+            
+            if (msg.content.indexOf(characterIndex[i].get("name"))!== -1){
+                log("charIndex name speaker 1"+characterIndex[i].get("name"))
+                
+                var cleanImgsrc = getCleanImgsrc(characterIndex[i].get("avatar"))
+                
+                newChar1 = createObj("graphic", {
+                name: characterIndex[i].get("name"),
+                imgsrc: cleanImgsrc,
+                left:175,
+                top:175,
+                width:210,
+                height:210,
+                pageid:Campaign().get("playerpageid"),
+                layer:"objects",
+                //controlledby: plyrCntrl
+                });
+                
+            speaker1 = characterIndex[i].get("name"); 
+            state.charSpeaking.push(newChar1);
+            state.charSpeakingNumber +=1;
+           
+            }
+            
+            if ((playerIsGM(msg.playerid)==false)&&(msg.playerid == characterIndex[i].get("controlledby"))){
+                log("charIndex name speaker2"+characterIndex[i].get("name"))
+                
+                var cleanImgsrc = getCleanImgsrc(characterIndex[i].get("avatar"))
+                
+                newChar2 = createObj("graphic", {
+                name: characterIndex[i].get("name"),
+                imgsrc: cleanImgsrc,
+                left:455,
+                top:175,
+                width:210,
+                height:210,
+                pageid:Campaign().get("playerpageid"),
+                layer:"objects",
+                });
+                
+            speaker2 = characterIndex[i].get("name");  
+            state.charSpeaking.push(newChar2);
+            state.charSpeakingNumber +=1;
+            }
+            
+        }
+        
+        if (playerIsGM(msg.playerid)==true){
+    
+                log("GMspeaks as "+GMchars[0].name)
+                
+                newChar2 = createObj("graphic", {
+                name: GMchars[0].name,
+                imgsrc: GMchars[0].imgsrc,
+                left:455,
+                top:175,
+                width:210,
+                height:210,
+                pageid:Campaign().get("playerpageid"),
+                layer:"objects",
+                });
+                
+            speaker2 = GMchars[0].name;  
+            state.charSpeaking.push(newChar2);
+            state.charSpeakingNumber +=1;
+        }
+        log("speaker1,2 at end of function: "+speaker1+" "+speaker2)
+        if ((speaker1!=0) && (speaker2!=0)){
+            sendChat("INTERACTION", String(speaker2)+" speaks to "+String(speaker1))
+        }
+    }
+});    
+
+state.charSpeaking = [];  
+state.charSpeakingNumber = 0;
+
+var GMchars = [
+    {"name":"Vulvara","imgsrc":"https://s3.amazonaws.com/files.d20.io/images/18502522/wHVxKVGTMZcic2GmMIDM6Q/thumb.jpg?1461713095"}
+   ];
+   
+   
+   
+ var getCleanImgsrc = function (imgsrc) {
+   var parts = imgsrc.match(/(.*\/images\/.*)(thumb|med|original|max)(.*)$/);
+   if(parts) {
+      return parts[1]+'thumb'+parts[3];
+   }
+   return;
+};
